@@ -1,14 +1,15 @@
 # Hardware und Messdaten
 
 ## Bekannter Stand
-- **Raspberry Pi:** vermutlich Pi 4 statt Pi 5. Modell prüfen mit `cat /proc/device-tree/model`; 64-Bit-System mit `uname -m` (`aarch64`). Pi 4 Model B hat BLE an Bord.
+- **Raspberry Pi:** bestätigt: Pi 4 Model B Rev 1.4, 8 GB, Debian 13.4 (trixie), aarch64, Kernel `6.12.75+rpt-rpi-v8`, Host `raspi-server`.
 - **Buzzer:** noch auszuwählen; wettergeschützter, potentialfreier Taster auf sicherem 3,3-V-GPIO-Kreis.
 - **Nebelmaschine:** vorhanden, kabelgebundene Fernbedienung. **Taster muss während des Nebelns gehalten werden.** Fernbedienung nicht öffnen; mechanischer Drücker erwünscht.
 - **Fingerbot:** originaler Bluetooth SwitchBot Bot als Kandidat. Druckkraft, mechanische Passform, Haltemodus, Rückzug und lokale BLE-Ansteuerung vor Einsatz verifizieren.
-- **KORAD KKG305P:** vorhandenes programmierbares Labornetzteil, über USB/serielle Verbindung zu testen.
+- **KORAD KKG305P:** USB-Steuerung bestätigt, Firmware V1.3. USB-ID `0416:5011`, Nuvoton Virtual COM, `/dev/ttyACM0`; stabiler Pfad `/dev/serial/by-id/usb-Nuvoton_USB_Virtual_COM_001C1A770452-if00`. Protokoll: 9600 Baud, 8N1, keine Flusssteuerung, LF-Zeilenabschluss. Details: [Testprotokoll](sound-sync.md).
 - **10-W-LED:** vorhanden, nackte Hochleistungs-LED **ohne Stromregler**. Erst wurden 12 V und 900 mA genannt, später 10 V und 800 mA als geplante Einstellungen. Das sind **keine bestätigten LED-Nennwerte und nicht zwingend gemessene Ausgangswerte**.
 - **DMX:** Showtec NET-2/3 Art-Net-Node und Flat Par QA5X als vorhandene Lichtprojekt-Geräte genannt; Anschluss/Kanalbelegung noch prüfen.
-- **Audio:** Lautsprechertyp/Anschluss offen.
+- **LED-Kühlung:** Kühlkörper laut Benutzer montiert. 10 V / 900 mA wurden vom Benutzer als bisherige maximale Betriebswerte genannt, nicht als bestätigte Nennwerte.
+- **Audio:** Logitech G433 USB, Klinkenanschluss am Logitech-Gerät; ALSA `plughw:CARD=Headset,DEV=0`. Gemeinsame Sound-/LED-Wiedergabe vom Benutzer bestätigt.
 
 ## Konzeptioneller Aufbau
 ```text

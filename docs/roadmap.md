@@ -3,19 +3,22 @@
 Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effekten.
 
 ## Bestandsaufnahme
-- [ ] Raspberry-Pi-Modell und OS-Architektur ermitteln.
+- [x] Raspberry-Pi-Modell und OS-Architektur ermitteln.
 - [ ] GPIO-Buzzer und wetterfestes Gehäuse auswählen.
 - [ ] Nebel-Fernbedienung dokumentieren; Tastenkraft und Haltezeit feststellen.
 - [ ] Fingerbot-Modell, lokale BLE-Steuerbarkeit, Halte-/Freigabefunktion klären.
 - [ ] LED-Datenblatt, Kühlung und zulässige Stromwerte prüfen.
 - [ ] KORAD bei eingeschalteter LED: CC/CV und tatsächliche Werte messen.
 - [ ] DMX-Node/LED-PAR: IP, Universum, Kanäle ermitteln.
-- [ ] Lautsprecher und Audioausgang klären.
+- [x] Audioausgang klären: Logitech G433 USB mit Klinkenanschluss.
 
 ## Unabhängige Tests
-- [ ] Pi und Audio prüfen.
+- [x] Pi und Audio prüfen.
 - [ ] GPIO-Tastendruck ohne Effektgeräte lesen.
-- [ ] KORAD über USB erkennen und sichere Abfragen testen.
+- [x] KORAD über USB erkennen und sichere Abfragen testen.
+- [x] Unbelasteter Schalttest bei 1 V / 50 mA.
+- [x] LED-Funktion und Lichtmuster bis 500 mA Stromvorgabe testen.
+- [x] Elektrischen Zap-Sound mit LED synchronisieren; vom Benutzer als passend bestätigt.
 - [ ] KORAD-Schalten ohne LED / mit geeigneter Prüflast auf Latenz und Stromspitzen testen.
 - [ ] Fingerbot-Tastendrücker ohne Nebelmaschine testen, zuverlässiges Loslassen prüfen.
 - [ ] Nebel-Fernbedienung nur kurz und kontrolliert mechanisch auslösen.
