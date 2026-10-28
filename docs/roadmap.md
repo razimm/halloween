@@ -4,9 +4,11 @@ Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effek
 
 ## Bestandsaufnahme
 - [x] Raspberry-Pi-Modell und OS-Architektur ermitteln.
-- [ ] GPIO-Buzzer und wetterfestes Gehäuse auswählen.
+- [x] Großen roten Buzzer auswählen und Schließerkontakt messen (offen / ca. 6 Ω gedrückt).
+- [ ] Buzzer per GPIO17 mit internem Pull-up testen; Außenmontage/Wetterschutz fertigstellen.
 - [ ] Nebel-Fernbedienung dokumentieren; Tastenkraft und Haltezeit feststellen.
-- [ ] Fingerbot-Modell, lokale BLE-Steuerbarkeit, Halte-/Freigabefunktion klären.
+- [x] **DS3218-Servo statt SwitchBot** als Nebel-Aktuator wählen.
+- [ ] Separate 5-V-/3-A-Versorgung, Halterung, Kalibrierung und sichere Freigabe des Servos testen.
 - [ ] LED-Datenblatt, Kühlung und zulässige Stromwerte prüfen.
 - [ ] KORAD bei eingeschalteter LED: CC/CV und tatsächliche Werte messen.
 - [ ] DMX-Node/LED-PAR: IP, Universum, Kanäle ermitteln.
@@ -20,7 +22,7 @@ Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effek
 - [x] LED-Funktion und Lichtmuster bis 500 mA Stromvorgabe testen.
 - [x] Elektrischen Zap-Sound mit LED synchronisieren; vom Benutzer als passend bestätigt.
 - [ ] KORAD-Schalten ohne LED / mit geeigneter Prüflast auf Latenz und Stromspitzen testen.
-- [ ] Fingerbot-Tastendrücker ohne Nebelmaschine testen, zuverlässiges Loslassen prüfen.
+- [ ] DS3218 zunächst ohne Nebelmaschine bewegen; danach Taster unter Aufsicht drücken und zuverlässiges Freigeben prüfen.
 - [ ] Nebel-Fernbedienung nur kurz und kontrolliert mechanisch auslösen.
 - [ ] Art-Net-Gerät ansprechen und unkritische Lichtstimmung testen.
 
@@ -30,6 +32,10 @@ Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effek
 - [ ] Konfigurierbare Timeline mit Audio und DMX.
 - [ ] Nebel- und KORAD-Module nur nach Tests aktivieren.
 - [ ] Sicherer Fehlerzustand und Logging.
+- [ ] Hama-USB-Fernbedienung mit Raspberry Pi erkennen und Tastencodes zuordnen.
+- [ ] HEOS 5 via lokales Netzwerk erkennen, USB-Soundbibliothek testen und Einzel-Sounds über HEOS-CLI starten.
+- [ ] Hama-Soundboard bewusst unabhängig vom Außen-Buzzer halten.
+- [ ] Halloween-Schild „Auf keinen Fall den Knopf drücken“ als Asset hinzufügen.
 - [ ] Optional Weboberfläche und mehrere Presets.
 
 ## Erfolgskriterien
