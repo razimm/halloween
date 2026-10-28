@@ -14,6 +14,12 @@
 - Schnelles Ein-/Ausschalten des Labornetzteils kann wegen Ausgangskapazität und Regelverzögerung Stromspitzen erzeugen. Die Grenze von 800 mA verhindert nicht zwingend kurze Peaks.
 - **Keinen einfachen PWM-MOSFET hinter dem KORAD als automatisch sicheren LED-Treiber ansehen.** Für schnelle Dimmung geeigneten Konstantstrom-LED-Treiber mit PWM-DIM-Eingang verwenden.
 
+## Kamera und Privatsphäre
+- Trust-Webcam nur zur Livebeobachtung des eigenen Eingangs; keine Aufzeichnung und keine Analyse von Personen.
+- Öffentliche Flächen und Nachbargrundstücke nicht erfassen; Zugriff nur im lokalen vertrauenswürdigen Netz.
+- Transparenz/Hinweise bei Besuchern und einschlägige Datenschutzanforderungen prüfen.
+- Kamera wettergeschützt montieren; ihr Dienst muss unabhängig von der sicherheitskritischen Showsteuerung laufen.
+
 ## Gäste und Elektrik
 - Elektronik im geschützten Gehäuse, Netzstrom nur fachgerecht, keine Stolperkabel.
 - GPIO nur mit 3,3-V-kompatiblen Schaltungen verbinden.
