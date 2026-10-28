@@ -31,13 +31,18 @@ Abbruch mit **Strg+C**. Details und Testergebnisse: [Sound-Synchronisation](docs
 | Gerät | Plan |
 |---|---|
 | Raspberry Pi 4 Model B Rev 1.4, 8 GB | Debian 13.4, aarch64; Python-Controller geplant |
-| Buzzer | GPIO-Eingang, 3,3 V, wetterfest |
-| Nebelmaschine mit Kabel-Fernbedienung | Mechanischer Bluetooth-Tastendrücker, der den Taster **gedrückt hält** |
-| SwitchBot Bot | Möglicher Fingerbot; noch nicht als gekauft bestätigt; Langdruck/BLE testen |
+| Roter Buzzer | Vorhanden; potentialfreier Schließer ausgemessen (offen / ca. 6 Ω gedrückt). GPIO17 vorgesehen. Startet **ausschließlich die vollständige automatische Show**. |
+| Nebelmaschine mit Kabel-Fernbedienung | Mechanischer DS3218-Servo hält den Taster für einen begrenzten Nebelstoß gedrückt; unabhängig abschaltbar. |
+| Miuzei DS3218 | Gewählter Servo statt SwitchBot; Pi-GPIO-PWM, separate 5-V-/3-A-Versorgung, Halterung und Rückstellung noch zu testen. |
 | KORAD KKG305P | USB-Steuerung und Sound-/LED-Ablauf erfolgreich getestet |
 | 10-W-Hochleistungs-LED | **Ohne eigene Stromregelung**; sichere Strombegrenzung erforderlich |
 | Showtec NET-2/3 / Flat Par QA5X | Vorgesehene Art-Net/DMX-Lichtsteuerung; Bestand/Kanalmodus verifizieren |
-| Audio | Logitech G433 USB, Klinkenanschluss am Logitech-Gerät getestet |
+| Audio | Logitech G433 USB für getesteten Sound-/LED-Ablauf; zusätzlicher HEOS 5 als geplanter Netzwerk-Soundplayer. |
+
+## Zwei getrennte Bedienwege
+
+- **Roter Buzzer draußen:** löst genau **eine komplette Halloween-Show** mit den dafür freigegebenen Effekten aus. Weitere Tastendrücke während Show und Sperrzeit werden ignoriert.
+- **Hama-USB-Fernbedienung:** dient **nur für zusätzliche spontane Einzel-Sounds** (z. B. Lachen, Donner, elektrisches Knistern) auf dem Denon HEOS 5; **startet weder die Hauptshow noch Nebel oder Lichteffekte**. Netzwerksteuerung und Tastenbelegung sind noch zu testen.
 
 ## Dateien
 - [Hardware](docs/hardware.md)
@@ -46,6 +51,8 @@ Abbruch mit **Strg+C**. Details und Testergebnisse: [Sound-Synchronisation](docs
 - [Roadmap](docs/roadmap.md)
 - [Sicherheit und Tests](docs/sicherheit.md)
 - [Sound-/LED-Ablauf und Startanleitung](docs/sound-sync.md)
+- [Servo für die Nebelmaschine](docs/servo.md)
+- [Hama-Soundboard und HEOS 5](docs/heos-soundboard.md)
 
 ## Entwicklungsstrategie
 Zuerst jedes Gerät einzeln erkennen und gefahrlos testen. Danach eine Python-Zustandsmaschine mit Simulationsmodus und Timeline aufbauen. Später optional eine lokale Weboberfläche für Shows, Lautstärke und Testfunktionen.
