@@ -31,6 +31,9 @@ Der bereits getestete Ablauf verwendet Logitech G433 USB-Audio. Zusätzlich soll
 
 Lokale Dateien rechtmäßig verwenden; Lautstärke begrenzen, Stop/Abbruch implementieren. Keine urheberrechtlich geschützten Songs im öffentlichen GitHub-Repository.
 
+## Webcam / separater Live-Stream
+Eine Trust-USB-Webcam soll ausschließlich den Eingang im Heimnetz sichtbar machen. Konzeption: V4L2-Kamera → FFmpeg → HLS-Segmente/Playlist im flüchtigen Speicher → Nginx → Browser/Player. Kein Recording, keine Bewegungserkennung und **keine Webcam-Auslösung** von Show oder Sounds. HLS-Latenz und Pi-Last separat testen. Siehe [Webcam](webcam.md).
+
 ## Vorgeschlagene spätere Code-Struktur
 ```text
 src/main.py
