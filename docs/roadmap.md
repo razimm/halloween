@@ -26,6 +26,13 @@ Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effek
 - [ ] Nebel-Fernbedienung nur kurz und kontrolliert mechanisch auslösen.
 - [ ] Art-Net-Gerät ansprechen und unkritische Lichtstimmung testen.
 
+## Webcam / Eingangsansicht
+- [ ] Trust-USB-Webcam am Pi mit USB/V4L2 identifizieren.
+- [ ] Auflösung, Framerate und Betrieb bei Dunkelheit prüfen; LED-Typ verifizieren.
+- [ ] Eigenständigen FFmpeg-/Nginx-HLS-Stream im Heimnetz testen (zunächst 640 × 480 / 15 fps, soweit unterstützt).
+- [ ] HLS-Verzögerung messen; bei Bedarf MJPEG/WebRTC statt HLS evaluieren.
+- [ ] Keine Archivierung, keine Internetfreigabe, eingegrenzten Bildausschnitt und Ressourcenlast sicherstellen.
+
 ## Software
 - [ ] Modulare Python-Struktur und Simulation.
 - [ ] Zustandsautomat mit Sperrzeit und Abbruch.
