@@ -2,7 +2,7 @@
 
 ## Nebelmaschine
 - Mechanischer Drücker betätigt nur die vorhandene Fernbedienung; keine Netzspannung und keine Heiz-/Temperatursicherungen verändern.
-- Der Knopf benötigt **Dauerdruck**. Sicherstellen, dass Aktuator zuverlässig loslässt, auch bei Pi-/Bluetooth-Ausfall. Eine **unabhängige Abschaltmöglichkeit** für die Nebelmaschine muss bleiben.
+- Der Knopf benötigt **Dauerdruck**. Der gewählte DS3218-Servo ist nicht selbsthemmend und benötigt zur Positionshaltung Strom. Mechanik mit sicheren Endpunkten, begrenzter Druckkraft, zuverlässigem Rückzug und nach Möglichkeit einer unabhängigen mechanischen Rückstellung auslegen. Auch bei Pi-/Stromausfall darf der Knopf nicht dauerhaft hängen bleiben. Eine **unabhängige Abschaltmöglichkeit** für die Nebelmaschine muss bleiben.
 - Kurze Nebelstöße und Sperrzeit; Hersteller-Aufwärmphase, zulässige Dauer, Flüssigkeit und Belüftung beachten.
 - Keine Vernebelung von Stufen, Fluchtwegen oder Gehwegen; Windrichtung und Sicht beachten.
 
@@ -27,5 +27,5 @@
 3. DMX mit unkritischer Lichtstimmung.
 4. KORAD USB erst ohne LED, dann Prüflast.
 5. Fingerbot allein, danach kontrolliert an Fernbedienung.
-6. Fehlerszenarien: Bluetooth weg, Pi-Neustart, mehrfacher Buzzer.
+6. Fehlerszenarien: Pi-Neustart, Servostrom-Ausfall, verklemmter Taster, mehrfacher Buzzer; spontane Hama-Sounds dürfen die Showsteuerung nicht auslösen.
 7. Gesamttest ohne Publikum und mit physischem Stop.
