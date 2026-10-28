@@ -21,7 +21,12 @@ Zeitpunkte sind vorläufig. Kein lautes Erschrecken direkt neben Kindern, keine 
 - Feuerflackern (sanft und unregelmäßig).
 - Gewitterblitze (nur milde, isolierte Akzente).
 - Dramatischer Lichtpuls zu ausgewählten Musik-Zeitpunkten.
-- Buzzer-Aufschrift „TRAUST DU DICH? DRÜCK MICH!“.
+- **Fertiges Schildmotiv:** querformatiges Halloween-Design mit frech grinsendem Kürbis, rotem Knopf und einzigem großen Text **„Auf keinen Fall den Knopf drücken“**. Bild noch als Asset ins Repository übernehmen.
+- Buzzer-Text im Konzept wurde durch dieses Motiv ersetzt.
 
 ## Interaktion
-Buzzer während RUNNING und COOLDOWN sperren; erst nach Rücksetzung neuen Lauf zulassen. Perspektivisch Weboberfläche für Shows, Lautstärke, Licht/Nebel ein/aus und Tests.
+**Roter Außen-Buzzer:** startet die ganze automatische Show; während RUNNING und COOLDOWN sperren, bis ein neuer Lauf zulässig ist.
+
+**Hama-Fernbedienung:** unabhängig davon spontane Einzelgeräusche auf dem HEOS 5, z. B. gruseliges Lachen, Schrei, Donner, Wolfsgeheul, knarrende Tür oder elektrisches *Bzzzt*. Keine Show-, Nebel- oder Lichtauslösung über die Hama-Fernbedienung. Überschneidungen zwischen spontanen Sounds und Show-Audio später bewusst festlegen.
+
+Perspektivisch Weboberfläche für Shows, Lautstärke, Licht/Nebel ein/aus und Tests.
