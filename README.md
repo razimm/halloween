@@ -53,6 +53,11 @@ Abbruch mit **Strg+C**. Details und Testergebnisse: [Sound-Synchronisation](docs
 - [Sound-/LED-Ablauf und Startanleitung](docs/sound-sync.md)
 - [Servo für die Nebelmaschine](docs/servo.md)
 - [Hama-Soundboard und HEOS 5](docs/heos-soundboard.md)
+- [Trust-Webcam / lokaler Nginx-HLS-Stream](docs/webcam.md)
+
+## Eingangsbereich beobachten
+
+Eine vorhandene Trust-USB-Webcam soll per FFmpeg und Nginx/HLS **nur im Heimnetz** ein Livebild des Eingangs liefern, damit Besucher rechtzeitig bemerkt werden. Keine Aufzeichnung, keine Personenerkennung und keine automatische Showauslösung durch die Kamera. Details: [Webcam-Konzept](docs/webcam.md).
 
 ## Entwicklungsstrategie
 Zuerst jedes Gerät einzeln erkennen und gefahrlos testen. Danach eine Python-Zustandsmaschine mit Simulationsmodus und Timeline aufbauen. Später optional eine lokale Weboberfläche für Shows, Lautstärke und Testfunktionen.
