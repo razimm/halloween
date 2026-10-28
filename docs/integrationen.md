@@ -10,10 +10,10 @@ IDLE --Buzzer--> RUNNING --Timeline fertig--> COOLDOWN --Timer--> IDLE
 Beim Start keine Aktoren automatisch auslösen. Während einer Show weitere Tastendrücke ignorieren; begrenzte Laufzeiten, Timeouts, Logging und physischer Not-Stopp.
 
 ## GPIO-Buzzer
-`gpiozero` als Kandidat. Nur 3,3-V-kompatible Beschaltung und Entprellung; Wetterschutz beachten.
+Der rote, bereits ausgemessene Buzzer ist ein Schließer (offen / ca. 6 Ω gedrückt). Geplant: GPIO17 gegen GND mit internem Pull-up und Entprellung; wetterfeste Leitung und geeignete Eingangssicherung bei Außenverkabelung prüfen. **Nur der Buzzer startet die gesamte Show.**
 
-## Nebel via Bluetooth-Fingerbot
-Original **SwitchBot Bot** als Kandidat, direkt per BLE vom Pi; Firmware/API auf Kompatibilität testen. Der Nebel-Taster muss **gehalten** werden: kurzes `press` reicht nicht. Geräteseitig eingestellten Langdruck bzw. Halten und Freigeben nach Kommunikationsausfall testen. Hersteller-/Community-BLE-Lösungen vor konkretem Code prüfen. Mechanische Befestigung darf nicht verklemmen. Die Nebelmaschine muss zusätzlich unabhängig vom Pi abschaltbar bleiben.
+## Nebel über DS3218-Servo
+Der **Miuzei DS3218** ist die getroffene Entscheidung (kein Bluetooth-Fingerbot). Der Pi gibt ein Positionssignal über GPIO18 aus; der Servo wird separat mit 5 V versorgt, mit gemeinsamer Signalmasse. Er hält den Taster der kabelgebundenen Fernbedienung nur für eine kurze, begrenzte Zeit gedrückt und fährt zurück. Die Endpunkte sind mechanisch zu kalibrieren. Der Servo hält unter Last aktiv seine Position; er ist **nicht selbsthemmend**. Es braucht eine sichere Freigabe, auch bei Ausfall, Verklemmen oder Pi-Neustart. Keine Änderung der Netzspannung oder der Sicherheitsschaltungen der Nebelmaschine. Siehe [Servo](servo.md).
 
 ## KORAD über USB
 USB-Kommunikation und tatsächliches Befehlsprotokoll **modellbezogen** prüfen (nicht jedes Gerät beherrscht allgemeines SCPI). Vorgehen:
@@ -26,17 +26,20 @@ Zeitliche Befehlsverzögerung (Jitter), Regelträgheit und Einschaltstromspitzen
 ## Art-Net/DMX
 Python sendet Art-Net an Showtec-Node; DMX-Kanalbelegung vorab einmessen. Sicheres Grundlicht statt blendender Strobo-Effekte.
 
-## Musik
-Lokale Datei, kabelgebundene Audioausgabe bevorzugt für geringere Latenz. Lautstärke begrenzen; Stop/Abbruch implementieren. Keine urheberrechtlich geschützten Songs im öffentlichen GitHub-Repository.
+## Musik und separates Soundboard
+Der bereits getestete Ablauf verwendet Logitech G433 USB-Audio. Zusätzlich soll die **Hama-Fernbedienung ausschließlich einzelne spontane Sounds** auslösen, die der **Denon HEOS 5** im Netzwerk abspielt. Sie darf die Hauptshow nicht starten und weder Servo/Nebel noch DMX/KORAD automatisch aktivieren. Die HEOS-CLI kann über TCP/1255 für Player- und Mediensteuerung verwendet werden; USB-Medien am HEOS müssen über die passende Mediennavigation identifiziert werden. HEOS-Startlatenz ist zu messen; keine präzise Synchronisation annehmen. Einzelheiten: [HEOS-Soundboard](heos-soundboard.md).
+
+Lokale Dateien rechtmäßig verwenden; Lautstärke begrenzen, Stop/Abbruch implementieren. Keine urheberrechtlich geschützten Songs im öffentlichen GitHub-Repository.
 
 ## Vorgeschlagene spätere Code-Struktur
 ```text
 src/main.py
 src/buzzer.py
-src/fog.py
+src/fog.py       # DS3218-Servo, keine Bluetooth-Fingerbot-Steuerung
 src/korad.py
 src/lighting.py
 src/audio.py
+src/remote.py    # Hama-Tastenevents / HEOS-Sounds
 shows/michael_myers.json
 requirements.txt
 ```
