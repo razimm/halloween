@@ -13,6 +13,8 @@
 - **Hama-Multimedia-Fernbedienung:** vorhanden, mit kleinem rotem USB-Empfänger; als separate Steuerung für spontane Sounds vorgesehen. Eingabecodes am Pi noch nicht ermittelt.
 - **Denon HEOS 5:** im gleichen Heimnetz, laut Benutzer bereits über HEOS-App bedienbar. Geplante Wiedergabe von Einzel-Sounds über HEOS-Netzwerksteuerung; USB-Stick am HEOS als mögliche Medienquelle noch testen.
 
+- **Webcam:** ältere Trust-USB-Webcam mit Standfuß und sechs LEDs um das Objektiv auf Fotos bestätigt. Exaktes Modell, V4L2-Unterstützung, Auflösung und LED-Typ offen. Geplant als reine LAN-Livebildquelle am Eingang; Nginx/HLS, ohne Aufnahme.
+
 ## Konzeptioneller Aufbau
 ```text
 Buzzer --> Pi GPIO
