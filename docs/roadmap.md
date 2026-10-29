@@ -47,3 +47,9 @@ Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effek
 
 ## Erfolgskriterien
 Ein Druck startet höchstens eine Show, zusätzliche Drücke werden ignoriert, Fehler lassen Nebel nicht dauerhaft weiterlaufen, sichere Stop-Funktion funktioniert; keine unnötigen Risiken für Kinder.
+
+## Status-LEDs am Buzzer
+- [x] Zwei normale LEDs (grün und rot) als vorhandene Hardware bestätigt.
+- [ ] Je LED eigenen 470-Ω-Vorwiderstand prüfen und einsetzen; GPIO22/Pin 15 für grün, GPIO23/Pin 16 für rot, GND z. B. Pin 20.
+- [ ] Zustände an zentrale Showsteuerung anbinden: IDLE grün, RUNNING rot, COOLDOWN rot blinkend; ERROR ohne irreführende Bereitschaft.
+- [ ] LED-Polarität, GPIO-Funktion und Start-/Crashverhalten testen; Außenmontage schützen.
