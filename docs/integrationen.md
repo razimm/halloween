@@ -50,3 +50,7 @@ Erst Hardware-Simulator, anschließend jeweils ein Integrationstest. Optional lo
 
 ## Codex
 Codex CLI kann für Entwicklung im geklonten Repo verwendet werden; auf dem Pi zuerst OS/Architektur und aktuelle Installationsanleitung prüfen. Keine Passwörter oder Geräteschlüssel committen.
+
+## Status-LEDs am Buzzer
+
+Zwei vorhandene diskrete LEDs werden direkt aus 3,3-V-GPIO-Ausgängen mit **jeweils eigenem 470-Ω-Reihenwiderstand** gesteuert. Grün an GPIO22 (physischer Pin 15), rot an GPIO23 (Pin 16), gemeinsame GPIO-Masse. Die LEDs sind Ausgabe der Show-Zustandsmaschine: IDLE = grün an; RUNNING = rot an; COOLDOWN = rot langsam blinkend; Fehler/Boot = grün aus. Buzzerstarts während RUNNING/COOLDOWN bleiben blockiert. Kein eigener Show-Auslöser, kein Bezug zur Hama-Fernbedienung. Nur planen/dokumentieren; Codex implementiert später.
