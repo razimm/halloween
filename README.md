@@ -24,7 +24,7 @@ Abbruch mit **Strg+C**. Details und Testergebnisse: [Sound-Synchronisation](docs
 1. Kind drückt Buzzer am Eingang („Traust du dich? Drück mich!“).
 2. Pi startet eine konfigurierbare, etwa 35 Sekunden lange Show.
 3. Musik, DMX-Licht, Nebel und zusätzliche LED laufen zeitlich koordiniert.
-4. Während RUNNING/COOLDOWN werden weitere Tastendrücke ignoriert.
+4. Während RUNNING bleiben weitere Tastendrücke ohne Reaktion. Im COOLDOWN löst ein erneuter Druck ausschließlich eine gruselige Sprachansage „Noch nicht!“ aus – nie die Hauptshow.
 5. Fehler oder Abbruch führen zu sicheren Ausgangszuständen.
 
 ## Technischer Überblick
@@ -41,7 +41,7 @@ Abbruch mit **Strg+C**. Details und Testergebnisse: [Sound-Synchronisation](docs
 
 ## Zwei getrennte Bedienwege
 
-- **Roter Buzzer draußen:** löst genau **eine komplette Halloween-Show** mit den dafür freigegebenen Effekten aus. Weitere Tastendrücke während Show und Sperrzeit werden ignoriert.
+- **Roter Buzzer draußen:** löst genau **eine komplette Halloween-Show** mit den dafür freigegebenen Effekten aus. Weitere Tastendrücke während der Show werden ignoriert; im Cooldown wird ausschließlich die Ansage „Noch nicht!“ ausgelöst (ohne Überlagerung).
 - **Hama-USB-Fernbedienung:** dient **nur für zusätzliche spontane Einzel-Sounds** (z. B. Lachen, Donner, elektrisches Knistern) auf dem Denon HEOS 5; **startet weder die Hauptshow noch Nebel oder Lichteffekte**. Netzwerksteuerung und Tastenbelegung sind noch zu testen.
 
 ## Dateien
@@ -72,6 +72,6 @@ bluetoothctl show
 
 Die Halloween-Titelmelodie (John Carpenter/Michael Myers) ist musikalische Inspiration. Keine geschützten Audiodateien ins Repository aufnehmen; Rechte für die Nutzung klären.
 
-## Status-LEDs am Buzzer
+## Rückmeldung während des Cooldowns
 
-Zwei vorhandene Einzel-LEDs zeigen den Besuchern den Zustand: **grün = Show bereit**, **rot dauerhaft = Show läuft**, **rot blinkend = Cooldown**. Während Show und Cooldown bleibt der Buzzer gesperrt. Details siehe [Hardware](docs/hardware.md). Diese Funktion ist geplant und noch nicht als implementiert bestätigt.
+Keine grünen/roten Status-LEDs am Buzzer. Während die Show **RUNNING** ist, werden Tastendrücke still ignoriert. Im **COOLDOWN** bewirkt ein neuer Buzzer-Druck nur die gruselig gesprochene Audiodatei **„Noch nicht!“**. Solange die Ansage abgespielt wird, werden weitere Druckereignisse verworfen: **kein Neustart, kein Abschneiden, keine gleichzeitig abgespielten Instanzen, keine Warteschlange**. Nach Ende der Ansage kann ein weiterer Druck im weiterhin aktiven Cooldown die Ansage erneut auslösen. In **IDLE** startet der Buzzer wieder regulär die vollständige Show. Die Hama-Fernbedienung bleibt unabhängig für spontane HEOS-Sounds.
