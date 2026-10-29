@@ -35,7 +35,7 @@ Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effek
 
 ## Software
 - [ ] Modulare Python-Struktur und Simulation.
-- [ ] Zustandsautomat mit Sperrzeit und Abbruch.
+- [ ] Zustandsautomat mit Sperrzeit, Abbruch und Cooldown-Sprachansage „Noch nicht!“.
 - [ ] Konfigurierbare Timeline mit Audio und DMX.
 - [ ] Nebel- und KORAD-Module nur nach Tests aktivieren.
 - [ ] Sicherer Fehlerzustand und Logging.
@@ -46,10 +46,13 @@ Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effek
 - [ ] Optional Weboberfläche und mehrere Presets.
 
 ## Erfolgskriterien
-Ein Druck startet höchstens eine Show, zusätzliche Drücke werden ignoriert, Fehler lassen Nebel nicht dauerhaft weiterlaufen, sichere Stop-Funktion funktioniert; keine unnötigen Risiken für Kinder.
+Ein Druck startet höchstens eine Show; während RUNNING werden zusätzliche Drücke ignoriert, im COOLDOWN lösen sie ausschließlich eine nicht überlappende „Noch nicht!“-Ansage aus, Fehler lassen Nebel nicht dauerhaft weiterlaufen, sichere Stop-Funktion funktioniert; keine unnötigen Risiken für Kinder.
 
-## Status-LEDs am Buzzer
-- [x] Zwei normale LEDs (grün und rot) als vorhandene Hardware bestätigt.
-- [ ] Je LED eigenen 470-Ω-Vorwiderstand prüfen und einsetzen; GPIO22/Pin 15 für grün, GPIO23/Pin 16 für rot, GND z. B. Pin 20.
-- [ ] Zustände an zentrale Showsteuerung anbinden: IDLE grün, RUNNING rot, COOLDOWN rot blinkend; ERROR ohne irreführende Bereitschaft.
-- [ ] LED-Polarität, GPIO-Funktion und Start-/Crashverhalten testen; Außenmontage schützen.
+## Cooldown-Sound statt Status-LEDs
+- [x] Idee für rote/grüne Buzzer-Status-LEDs verworfen; keine Status-LED-Verdrahtung einplanen.
+- [ ] Gruselige Audiodatei mit den Worten „Noch nicht!“ bereitstellen (Datei/Rechte und Wiedergabegerät festlegen).
+- [ ] Buzzer-Events nach Zustand trennen: IDLE = Show starten; RUNNING = stumm ignorieren; COOLDOWN = ausschließlich Ansage anfordern.
+- [ ] Audiowiedergabe als single-instance/non-reentrant auslegen: weitere Drücke während laufender Ansage ignorieren, nicht neu starten, nicht abschneiden, keine Überlagerung und keine Queue.
+- [ ] Wenn Ansage beendet und Cooldown noch aktiv ist, darf ein neuer Druck eine weitere vollständige Ansage starten.
+- [ ] Übergang COOLDOWN → IDLE darf laufende Ansage nicht mitten im Satz abbrechen; gewünschtes Verhalten bzgl. erneuter Showstarts beim Übergang testen.
+- [ ] Schnelles mehrfaches Drücken, Bounce, gleichzeitiger Zustandswechsel und sauberen Abbruch testen.
