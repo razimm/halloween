@@ -71,3 +71,7 @@ bluetoothctl show
 ```
 
 Die Halloween-Titelmelodie (John Carpenter/Michael Myers) ist musikalische Inspiration. Keine geschützten Audiodateien ins Repository aufnehmen; Rechte für die Nutzung klären.
+
+## Status-LEDs am Buzzer
+
+Zwei vorhandene Einzel-LEDs zeigen den Besuchern den Zustand: **grün = Show bereit**, **rot dauerhaft = Show läuft**, **rot blinkend = Cooldown**. Während Show und Cooldown bleibt der Buzzer gesperrt. Details siehe [Hardware](docs/hardware.md). Diese Funktion ist geplant und noch nicht als implementiert bestätigt.
