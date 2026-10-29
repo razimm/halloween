@@ -7,10 +7,10 @@ IDLE --Buzzer--> RUNNING --Timeline fertig--> COOLDOWN --Timer--> IDLE
                     |
                     +-- Fehler/Stop --> sicherer Stopp / ERROR
 ```
-Beim Start keine Aktoren automatisch auslösen. Während einer Show weitere Tastendrücke ignorieren; begrenzte Laufzeiten, Timeouts, Logging und physischer Not-Stopp.
+Beim Start keine Aktoren automatisch auslösen. Während RUNNING zusätzliche Tastendrücke ignorieren; während COOLDOWN stattdessen nur die Sprachansage „Noch nicht!“ anfordern. Keine weitere Show starten. Begrenzte Laufzeiten, Timeouts, Logging und physischer Not-Stopp.
 
 ## GPIO-Buzzer
-Der rote, bereits ausgemessene Buzzer ist ein Schließer (offen / ca. 6 Ω gedrückt). Geplant: GPIO17 gegen GND mit internem Pull-up und Entprellung; wetterfeste Leitung und geeignete Eingangssicherung bei Außenverkabelung prüfen. **Nur der Buzzer startet die gesamte Show.**
+Der rote, bereits ausgemessene Buzzer ist ein Schließer (offen / ca. 6 Ω gedrückt). Geplant: GPIO17 gegen GND mit internem Pull-up und Entprellung; wetterfeste Leitung und geeignete Eingangssicherung bei Außenverkabelung prüfen. **Nur der Buzzer startet die gesamte Show, und zwar ausschließlich im IDLE-Zustand.** Im RUNNING-Zustand keine Reaktion, im COOLDOWN-Zustand ausschließlich die Ansage „Noch nicht!“.
 
 ## Nebel über DS3218-Servo
 Der **Miuzei DS3218** ist die getroffene Entscheidung (kein Bluetooth-Fingerbot). Der Pi gibt ein Positionssignal über GPIO18 aus; der Servo wird separat mit 5 V versorgt, mit gemeinsamer Signalmasse. Er hält den Taster der kabelgebundenen Fernbedienung nur für eine kurze, begrenzte Zeit gedrückt und fährt zurück. Die Endpunkte sind mechanisch zu kalibrieren. Der Servo hält unter Last aktiv seine Position; er ist **nicht selbsthemmend**. Es braucht eine sichere Freigabe, auch bei Ausfall, Verklemmen oder Pi-Neustart. Keine Änderung der Netzspannung oder der Sicherheitsschaltungen der Nebelmaschine. Siehe [Servo](servo.md).
@@ -51,6 +51,17 @@ Erst Hardware-Simulator, anschließend jeweils ein Integrationstest. Optional lo
 ## Codex
 Codex CLI kann für Entwicklung im geklonten Repo verwendet werden; auf dem Pi zuerst OS/Architektur und aktuelle Installationsanleitung prüfen. Keine Passwörter oder Geräteschlüssel committen.
 
-## Status-LEDs am Buzzer
+## Cooldown-Sprachansage (statt Status-LEDs)
 
-Zwei vorhandene diskrete LEDs werden direkt aus 3,3-V-GPIO-Ausgängen mit **jeweils eigenem 470-Ω-Reihenwiderstand** gesteuert. Grün an GPIO22 (physischer Pin 15), rot an GPIO23 (Pin 16), gemeinsame GPIO-Masse. Die LEDs sind Ausgabe der Show-Zustandsmaschine: IDLE = grün an; RUNNING = rot an; COOLDOWN = rot langsam blinkend; Fehler/Boot = grün aus. Buzzerstarts während RUNNING/COOLDOWN bleiben blockiert. Kein eigener Show-Auslöser, kein Bezug zur Hama-Fernbedienung. Nur planen/dokumentieren; Codex implementiert später.
+Die rot/grünen Buzzer-Status-LEDs sind gestrichen. Beim Drücken des roten Buzzers gilt:
+
+| Showzustand | Reaktion |
+| --- | --- |
+| IDLE | Einmaliger Start der vollständigen Halloween-Show |
+| RUNNING | Weitere Drücke ohne akustische Rückmeldung ignorieren |
+| COOLDOWN | Nur die gruselige Ansage **„Noch nicht!“** anfordern; weder Show noch Nebel/Licht neu starten |
+| ERROR/STOP | Kein neuer Showstart; sichere Fehlerbehandlung |
+
+**Wiedergabe-Semantik:** Ein eigener non-reentrant Audioeffekt mit genau einer aktiven Instanz. Drücke während der laufenden Ansage werden verworfen, nicht gepuffert oder neu gestartet. Der Sound läuft bis zu seinem regulären Ende und kann danach erneut ausgelöst werden, solange der Cooldown aktiv ist. Der Cooldown-Timer läuft unabhängig weiter; der Übergang in IDLE darf eine laufende Ansage nicht ungewollt abschneiden (Ende abwarten oder Showstart bis zum Ende sperren). Fehler/Not-Stopp darf bei Bedarf Audio sicher abbrechen. Taster-Entprellung getrennt von dieser Wiedergabesperre vorsehen.
+
+Das ist ein **Buzzer-Effekt**, kein Hama-Fernbedienungs-Soundboard-Effekt. Für geringe Latenz zunächst den vorhandenen lokalen Logitech-G433-Audiopfad prüfen; Ausgabe und Mischung mit etwaigen weiteren Sounds müssen in Codex konkretisiert werden. Keine Audiodatei oder Implementierung in diesem Dokument.
