@@ -35,17 +35,6 @@ Hama-USB-Empfänger --> Pi --> nur spontane Sounds auf HEOS 5
 6. DMX-IP, Universum, Startadresse und Kanalmodus.
 7. Hama-Empfänger und Tastenereignisse prüfen; HEOS-IP und USB-Mediennavigation ermitteln; wetterfeste/zugentlastete Montage.
 
-## Buzzer-Statusanzeige (neu geplant)
+## Buzzer-Status ohne zusätzliche LEDs
 
-Zwei **bereits vorhandene, normale diskrete LEDs** am Hauseingang sollen den Besuchern anzeigen, ob der rote Buzzer eine Show starten kann. Keine zusätzlichen Netzteile für die LEDs vorgesehen.
-
-| Zustand | Grün | Rot | Buzzer |
-| --- | --- | --- | --- |
-| IDLE / bereit | Dauerhaft an | Aus | Start erlaubt |
-| RUNNING / Show läuft | Aus | Dauerhaft an | Weitere Tastendrücke ignorieren |
-| COOLDOWN | Aus | Langsam blinkend | Weitere Tastendrücke ignorieren |
-| ERROR / Initialisierung | Aus | Fehleranzeige (noch festzulegen) | Gesperrt |
-
-**Vorgesehene GPIOs:** grün GPIO22 (physischer Pin 15), rot GPIO23 (Pin 16), beide Kathoden an GND (z. B. physischer Pin 20). Jede LED erhält **einen eigenen Vorwiderstand von zunächst 470 Ω** in Reihe an der 3,3-V-GPIO-Seite. Gilt für gewöhnliche Einzel-LEDs; Polarität und Vorwärtsspannung vor Anschluss prüfen. Kein GPIO darf mit externer Spannung gespeist werden. Bei längeren Außenleitungen Störschutz, Wetterfestigkeit und mechanische Zugentlastung berücksichtigen.
-
-**Zustandslogik:** LEDs zeigen den tatsächlichen Status der zentralen Show-Zustandsmaschine, nicht nur einen Zeitplan. Grün darf erst leuchten, wenn die Show wirklich startbereit ist. Nach Boot/Crash zunächst keine falsche grüne Bereitschaft signalisieren. Der Buzzer bleibt der **einzige Startauslöser für die vollständige Show**; die Hama-Fernbedienung bleibt ausschließlich für spontane Einzel-Sounds. Noch nicht implementiert, Umsetzung mit Codex.
+Die ehemals geplanten zwei diskreten rot/grünen Status-LEDs werden **nicht verwendet**. Rückmeldung im Cooldown erfolgt ausschließlich über eine gruselige gesprochene **„Noch nicht!“**-Audiodatei beim erneuten Drücken des roten Buzzers. Die vorhandene 10-W-Hochleistungs-LED für die Lichteffekte bleibt davon **unberührt**. Audio-Ausgabegerät/Datei nach Funktionstest festlegen.
