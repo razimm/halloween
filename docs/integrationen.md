@@ -22,8 +22,8 @@ LOCKED löst zufällige Ansage plus drei rote Blinkzyklen aus. Während Ansagen 
 es keine neuen Sounds, Neustarts oder Warteschlangen. Hama-Taste 1 (`KEY_KP1`, 79)
 ist ausschließlich die Freigabe, kein Showstart. Außenschutz weiter prüfen.
 
-## Nebel über DS3218-Servo
-Der **Miuzei DS3218** ist die getroffene Entscheidung (kein Bluetooth-Fingerbot). Der Pi gibt ein Positionssignal über GPIO18 aus; der Servo wird separat mit 5 V versorgt, mit gemeinsamer Signalmasse. Er hält den Taster der kabelgebundenen Fernbedienung nur für eine kurze, begrenzte Zeit gedrückt und fährt zurück. Die Endpunkte sind mechanisch zu kalibrieren. Der Servo hält unter Last aktiv seine Position; er ist **nicht selbsthemmend**. Es braucht eine sichere Freigabe, auch bei Ausfall, Verklemmen oder Pi-Neustart. Keine Änderung der Netzspannung oder der Sicherheitsschaltungen der Nebelmaschine. Siehe [Servo](servo.md).
+## Nebel über MS24-UF-Servo
+Der **Miuzei MS24-UF** ist die getroffene Entscheidung (kein Bluetooth-Fingerbot). Der Pi gibt ein Positionssignal über GPIO18 aus; der Servo wird separat mit 5 V versorgt, mit gemeinsamer Signalmasse. Er hält den Taster der kabelgebundenen Fernbedienung nur für eine kurze, begrenzte Zeit gedrückt und fährt zurück. Die Endpunkte sind mechanisch zu kalibrieren. Der Servo hält unter Last aktiv seine Position; er ist **nicht selbsthemmend**. Es braucht eine sichere Freigabe, auch bei Ausfall, Verklemmen oder Pi-Neustart. Keine Änderung der Netzspannung oder der Sicherheitsschaltungen der Nebelmaschine. Siehe [Servo](servo.md).
 
 ## KORAD über USB
 USB-Kommunikation und tatsächliches Befehlsprotokoll **modellbezogen** prüfen (nicht jedes Gerät beherrscht allgemeines SCPI). Vorgehen:
@@ -53,7 +53,7 @@ Eine Trust-USB-Webcam soll ausschließlich den Eingang im Heimnetz sichtbar mach
 ```text
 src/main.py
 src/buzzer.py
-src/fog.py       # DS3218-Servo, keine Bluetooth-Fingerbot-Steuerung
+src/fog.py       # MS24-UF-Servo, keine Bluetooth-Fingerbot-Steuerung
 src/korad.py
 src/lighting.py
 src/audio.py
