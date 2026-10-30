@@ -1,6 +1,8 @@
 import argparse
 import array
 import importlib.util
+import shutil
+import subprocess
 import tempfile
 import unittest
 import wave
@@ -61,13 +63,100 @@ class SoundLightTests(unittest.TestCase):
         supply.shutdown.assert_called_once()
         supply.serial.close.assert_called_once()
 
+    def test_playback_file_preserves_source_and_reuses_scaled_audio(self):
+        samples = [10000, -10000, 32767, -32768]
+        self.write_audio(samples)
+        original = self.audio.read_bytes()
+        directory = Path(self.directory.name) / 'audio' / 'playback'
+        with patch.object(sound_light, 'PLAYBACK_DIR', directory):
+            quiet = sound_light.playback_audio(self.audio, .2)
+            self.assertEqual(quiet.parent, directory)
+            with wave.open(str(quiet)) as output:
+                self.assertEqual(output.getframerate(), 16000)
+                scaled = array.array('h', output.readframes(output.getnframes()))
+            self.assertEqual(list(scaled), [2000, -2000, 6553, -6554])
+            modified = quiet.stat().st_mtime_ns
+            self.assertEqual(sound_light.playback_audio(self.audio, .2), quiet)
+            self.assertEqual(quiet.stat().st_mtime_ns, modified)
+        self.assertEqual(self.audio.read_bytes(), original)
+
     def test_invalid_current_does_not_send_a_command(self):
         supply = sound_light.Supply.__new__(sound_light.Supply)
+        supply.max_current = .500
         supply.serial = Mock()
         for current in [0, -.1, .501, float('nan'), float('inf')]:
             with self.assertRaises(ValueError):
                 supply.current(current)
         supply.serial.write.assert_not_called()
+
+    def test_boost_preserves_duration_and_rejects_clipping(self):
+        self.write_audio([10000, -10000, 19000, -19000])
+        original = self.audio.read_bytes()
+        with patch.object(sound_light, 'PLAYBACK_DIR', Path(self.directory.name) / 'playback'):
+            boosted = sound_light.playback_audio(self.audio, 1.5)
+            with wave.open(str(boosted)) as output:
+                self.assertEqual(output.getnframes(), 4)
+                self.assertEqual(output.getframerate(), 16000)
+                samples = array.array('h', output.readframes(4))
+            self.assertEqual(list(samples), [15000, -15000, 28500, -28500])
+            self.assertEqual(self.audio.read_bytes(), original)
+            self.write_audio([32767, -32768])
+            with self.assertRaisesRegex(ValueError, 'would clip'):
+                sound_light.playback_audio(self.audio, 1.5)
+
+    def test_zap_analysis_and_supply_respect_configured_700ma_ceiling(self):
+        self.write_audio([0] * 1600 + [32767, -32768] * 4000 + [0] * 1600)
+        timeline = sound_light.analyze(self.audio, max_current=.700)
+        self.assertEqual(timeline['max_current_A'], .700)
+        self.assertEqual(max(e['current_A'] for e in timeline['events']), .700)
+        self.assertTrue(all(.001 <= e['current_A'] <= .700 for e in timeline['events']))
+        supply = sound_light.Supply.__new__(sound_light.Supply)
+        supply.max_current = .700
+        supply.serial = Mock()
+        supply.current(.700)
+        supply.serial.write.assert_called_once_with(b'ISET1:0.700\n')
+        for value in (.701, float('nan'), float('inf')):
+            with self.assertRaises(ValueError):
+                supply.current(value)
+        with self.assertRaises(ValueError):
+            sound_light.analyze(self.audio, max_current=.701)
+
+    @unittest.skipUnless(shutil.which('ffmpeg'), 'ffmpeg required for MP3 integration')
+    def test_mp3_simulation_decodes_and_reuses_audio_without_hardware(self):
+        self.write_audio([0] * 1600 + [12000, -12000] * 4000 + [0] * 1600)
+        mp3 = self.audio.with_suffix('.mp3')
+        subprocess.run(['ffmpeg', '-v', 'error', '-i', str(self.audio), str(mp3)],
+                       check=True, capture_output=True)
+        original = mp3.read_bytes()
+        directory = Path(self.directory.name) / 'playback'
+        timeline_path = Path(self.directory.name) / 'timeline.json'
+        with patch.object(sound_light, 'PLAYBACK_DIR', directory), \
+                patch('sys.argv', ['sound_light.py', str(mp3), '--timeline',
+                                   str(timeline_path)]), \
+                patch.object(sound_light, 'Supply') as supply, \
+                patch.object(sound_light.subprocess, 'Popen',
+                             wraps=subprocess.Popen) as processes:
+            sound_light.main()
+            supply.assert_not_called()
+            self.assertEqual(processes.call_count, 1)
+            self.assertEqual(processes.call_args.args[0][0], 'ffmpeg')
+            decoded = sound_light.prepare_audio(mp3)
+            modified = decoded.stat().st_mtime_ns
+            self.assertEqual(sound_light.prepare_audio(mp3).stat().st_mtime_ns, modified)
+            timeline = sound_light.json.loads(timeline_path.read_text())
+            self.assertEqual(timeline['source'], mp3.name)
+            self.assertAlmostEqual(timeline['duration_s'], .7, places=2)
+            self.assertTrue(any(event['zap'] for event in timeline['events']))
+            self.assertTrue(all(.001 <= event['current_A'] <= .5
+                                for event in timeline['events']))
+            quiet = sound_light.playback_audio(decoded, .2)
+            with wave.open(str(quiet)) as audio:
+                self.assertAlmostEqual(audio.getnframes() / audio.getframerate(),
+                                       timeline['duration_s'])
+            processes.reset_mock()
+            sound_light.main()
+            processes.assert_not_called()
+        self.assertEqual(mp3.read_bytes(), original)
 
 
 if __name__ == '__main__':

@@ -1,39 +1,45 @@
-# Sound und LED synchronisieren
+# Einzeltest: Sound und LED synchronisieren
+
+Für den vollständigen Dauerbetrieb mit Buzzer, Hama und Idle-Musik siehe
+[Showcontroller](show.md). Die folgenden Netzteil-Messungen und Python-Aufrufe
+beschreiben den separaten Zap-Test. `start-show.sh` startet jetzt den vollständigen Controller.
 
 Referenz: [Electric Shock / Taser Zap – Jochi SFX](https://www.youtube.com/watch?v=Zfcaj7M0Qnk).
-Die analysierte Audiospur dauert 7,419 Sekunden. Die wesentlichen
-Entladungen liegen ungefähr bei 1,32–1,96 s, 3,24–3,60 s und 4,80–5,36 s.
-Die WAV-Datei liegt lokal unter `audio/electric-zap.wav` (Mono, 16 kHz,
-16 Bit PCM). WAV-Dateien in `audio/` sind von Git ausgeschlossen, da der
-Urheber die Nutzung in Projekten erlaubt, aber die Weiterverteilung der
-Sounddateien untersagt (siehe Beschreibung des verlinkten Videos).
+Die aktuelle Schnittfassung liegt unter `audio/electric-zap_break_final.mp3`
+und ersetzt `audio/electric-zap.wav`. Die dekodierte Audiospur dauert
+9,335 Sekunden. Die Timeline wird bei jedem Start aus der aktuellen Datei
+berechnet; die Zeitmarken der alten 7,419-Sekunden-Fassung gelten nicht mehr.
+Audiodateien werden lokal bereitgestellt und von Git ignoriert.
 
-`tools/sound_light.py` analysiert Mono-PCM-WAV mit 16 Bit in 80-ms-Fenstern.
+`tools/sound_light.py` dekodiert MP3 mit FFmpeg einmalig in eine Mono-WAV
+(44,1 kHz, 16 Bit PCM) unter `audio/playback/`. Analyse und Wiedergabe
+verwenden dieselben dekodierten Samples, einschließlich der MP3-Verzögerungskorrektur.
+Die Analyse erfolgt weiterhin in 80-ms-Fenstern.
 In den Pausen bleibt die LED dauerhaft hell (500 mA). In den Entladungen
 folgt die Stromvorgabe dem Lautstärkeverlauf (5–500 mA). Der Benutzer hat
 die gemeinsame Wiedergabe über Logitech G433 am 26.10.2026 als passend
-bestätigt (»perfekt«). Es wurde kein zusätzlicher Timingversatz benötigt.
+bestätigt (»perfekt«), damals mit der alten WAV-Fassung. Die neue MP3-Fassung
+ist in Simulation geprüft; ein erneuter Hör-/Lichttest steht aus.
 
 ## Einrichtung und täglicher Start
 
 ```bash
 ./setup.sh
 ./start-show.sh --simulate
-sudo ./start-show.sh
+sudo ./start-show.sh --play
 ```
 
 `setup.sh` erstellt `.venv/` dauerhaft im Projekt und installiert die
-festgelegte pyserial-Version. Voraussetzungen: Python 3 mit venv/pip und
-`alsa-utils` (`aplay`). Das Startskript funktioniert auch aus einem anderen
-Arbeitsverzeichnis. Kein Teil des Starts hängt von `/tmp` ab.
-Nach einem frischen Clone muss die WAV separat bereitgestellt werden:
+festgelegten Treiberpakete. Voraussetzungen: Python 3 mit venv/pip und
+`alsa-utils` (`aplay`) und `ffmpeg`. Das Startskript funktioniert auch aus einem anderen
+Arbeitsverzeichnis. Lautstärkeangepasste Wiedergabedateien liegen dauerhaft in `audio/playback/`, nicht in `/tmp`.
+Nach einem frischen Clone muss die MP3 separat bereitgestellt werden:
 [Audio-Herkunft und Format](../audio/README.md).
 
-Das Startskript startet **echte Hardware**; `--simulate` wählt ausschließlich
-die Analyse ohne USB oder Ton. Weitere Optionen werden weitergereicht:
+Das Startskript simuliert standardmäßig; `--play` startet echte Hardware. Weitere Optionen werden weitergereicht:
 
 ```bash
-sudo ./start-show.sh --gain 0.2 --light-lead-ms 0
+sudo .venv/bin/python tools/sound_light.py audio/electric-zap_break_final.mp3 --play --audio-device 'plughw:CARD=Headset,DEV=0' --gain 0.2 --light-lead-ms 0
 ```
 
 Getesteter Ausgang: `plughw:CARD=Headset,DEV=0` (Logitech G433 USB mit
@@ -44,13 +50,13 @@ Keine Radio-Dienste wurden gestoppt oder umkonfiguriert.
 
 ```bash
 # Standard ist Simulation, ohne Hardwarezugriff oder Wiedergabe
-python tools/sound_light.py audio/electric-zap.wav --timeline shows/electric-zap.json
+python tools/sound_light.py audio/electric-zap_break_final.mp3 --timeline shows/electric-zap.json
 
 # Nur bei angeschlossener LED auf Kühlkörper und freiem Audioausgang:
-python tools/sound_light.py audio/electric-zap.wav --play --audio-device 'plughw:CARD=Headset,DEV=0'
+python tools/sound_light.py audio/electric-zap_break_final.mp3 --play --audio-device 'plughw:CARD=Headset,DEV=0'
 ```
 
-Python benötigt `pyserial`, die Wiedergabe `aplay`. Der Benutzer benötigt
+Python benötigt `pyserial`, die MP3-Dekodierung `ffmpeg`, die Wiedergabe `aplay`. Der Benutzer benötigt
 Zugriff auf den seriellen Port und das Audiogerät. Nicht parallel zu anderen
 Netzteil-Steuerprogrammen starten. Port und Audioausgang sind explizit wählbar.
 Standardmäßig wird nur diese Wiedergabe auf 20 Prozent Sample-Amplitude reduziert;
@@ -100,15 +106,17 @@ und kein Nachweis für einen sicheren LED-Dauerbetrieb.
   Übliche Endeinstellung: 0 V / 10 mA.
 
 Die gespeicherte JSON-Timeline enthält nur Steuerwerte, keine Audiodaten.
-Das Programm erzeugt sie aus der lokalen WAV beim Start neu, damit Datei und
+Das Programm erzeugt sie aus der aktuellen Audiodatei beim Start neu, damit Datei und
 Ablauf zusammenpassen. Aktorsteuerung für Nebel, GPIO-Buzzer und DMX ist noch offen.
 
 ## Softwareprüfungen
 
 ```bash
-.venv/bin/python -m unittest discover -s tests -v
+./test.sh
 ./start-show.sh --simulate
 ```
 
 Die Tests prüfen Stromgrenzen und Lautlosigkeit der Simulation sowie das
 Aufräumen nach einem Wiedergabefehler. Sie ersetzen keine elektrischen Messungen.
+
+`./test.sh` bleibt bei Erfolg still und zeigt nur bei Fehlern das Testprotokoll.

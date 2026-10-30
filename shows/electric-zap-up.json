@@ -1,0 +1,258 @@
+{
+  "source": "electric-zap_up_final.mp3",
+  "duration_s": 3.987437641723356,
+  "voltage_ceiling_V": 10.0,
+  "max_current_A": 0.7,
+  "events": [
+    {
+      "time_s": 0.0,
+      "current_A": 0.424,
+      "zap": true
+    },
+    {
+      "time_s": 0.08,
+      "current_A": 0.509,
+      "zap": true
+    },
+    {
+      "time_s": 0.16,
+      "current_A": 0.461,
+      "zap": true
+    },
+    {
+      "time_s": 0.24,
+      "current_A": 0.636,
+      "zap": true
+    },
+    {
+      "time_s": 0.32,
+      "current_A": 0.693,
+      "zap": true
+    },
+    {
+      "time_s": 0.4,
+      "current_A": 0.688,
+      "zap": true
+    },
+    {
+      "time_s": 0.48,
+      "current_A": 0.35,
+      "zap": true
+    },
+    {
+      "time_s": 0.56,
+      "current_A": 0.406,
+      "zap": true
+    },
+    {
+      "time_s": 0.64,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 0.72,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 0.8,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 0.88,
+      "current_A": 0.534,
+      "zap": true
+    },
+    {
+      "time_s": 0.96,
+      "current_A": 0.586,
+      "zap": true
+    },
+    {
+      "time_s": 1.04,
+      "current_A": 0.661,
+      "zap": true
+    },
+    {
+      "time_s": 1.12,
+      "current_A": 0.572,
+      "zap": true
+    },
+    {
+      "time_s": 1.2,
+      "current_A": 0.267,
+      "zap": true
+    },
+    {
+      "time_s": 1.28,
+      "current_A": 0.487,
+      "zap": true
+    },
+    {
+      "time_s": 1.36,
+      "current_A": 0.32,
+      "zap": true
+    },
+    {
+      "time_s": 1.44,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 1.52,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 1.6,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 1.68,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 1.76,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 1.84,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 1.92,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 2.0,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 2.08,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 2.16,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 2.24,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 2.32,
+      "current_A": 0.163,
+      "zap": true
+    },
+    {
+      "time_s": 2.4,
+      "current_A": 0.602,
+      "zap": true
+    },
+    {
+      "time_s": 2.48,
+      "current_A": 0.486,
+      "zap": true
+    },
+    {
+      "time_s": 2.56,
+      "current_A": 0.315,
+      "zap": true
+    },
+    {
+      "time_s": 2.64,
+      "current_A": 0.299,
+      "zap": true
+    },
+    {
+      "time_s": 2.72,
+      "current_A": 0.54,
+      "zap": true
+    },
+    {
+      "time_s": 2.8,
+      "current_A": 0.608,
+      "zap": true
+    },
+    {
+      "time_s": 2.88,
+      "current_A": 0.684,
+      "zap": true
+    },
+    {
+      "time_s": 2.96,
+      "current_A": 0.502,
+      "zap": true
+    },
+    {
+      "time_s": 3.04,
+      "current_A": 0.123,
+      "zap": true
+    },
+    {
+      "time_s": 3.12,
+      "current_A": 0.501,
+      "zap": true
+    },
+    {
+      "time_s": 3.2,
+      "current_A": 0.308,
+      "zap": true
+    },
+    {
+      "time_s": 3.28,
+      "current_A": 0.554,
+      "zap": true
+    },
+    {
+      "time_s": 3.36,
+      "current_A": 0.566,
+      "zap": true
+    },
+    {
+      "time_s": 3.44,
+      "current_A": 0.7,
+      "zap": true
+    },
+    {
+      "time_s": 3.52,
+      "current_A": 0.5,
+      "zap": true
+    },
+    {
+      "time_s": 3.6,
+      "current_A": 0.261,
+      "zap": true
+    },
+    {
+      "time_s": 3.68,
+      "current_A": 0.49,
+      "zap": true
+    },
+    {
+      "time_s": 3.76,
+      "current_A": 0.326,
+      "zap": true
+    },
+    {
+      "time_s": 3.84,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 3.92,
+      "current_A": 0.7,
+      "zap": false
+    }
+  ]
+}

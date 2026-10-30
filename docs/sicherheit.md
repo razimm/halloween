@@ -32,6 +32,6 @@
 2. Buzzer und Audio mit begrenzter Lautstärke.
 3. DMX mit unkritischer Lichtstimmung.
 4. KORAD USB erst ohne LED, dann Prüflast.
-5. Fingerbot allein, danach kontrolliert an Fernbedienung.
+5. DS3218-Servo allein, danach kontrolliert an Fernbedienung.
 6. Fehlerszenarien: Pi-Neustart, Servostrom-Ausfall, verklemmter Taster, mehrfacher Buzzer; spontane Hama-Sounds dürfen die Showsteuerung nicht auslösen.
 7. Gesamttest ohne Publikum und mit physischem Stop.

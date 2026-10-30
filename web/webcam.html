@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eingang · Halloween</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#111416;color:#f3f3f0}
+*{box-sizing:border-box}body{margin:0;padding:24px;padding:clamp(16px,4vw,48px)}main{max-width:1040px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}
+h1{font-size:30px;font-size:clamp(24px,4vw,36px);font-weight:600;margin:4px 0}p{color:#a9b0b3;font-size:14px}
+.label{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#db9c63}
+#state{font-size:14px;color:#d9ad68}#state.live{color:#9cdcac}
+#view{position:relative;background:#080a0b;border:1px solid #30373b;border-radius:12px;overflow:hidden;height:65vh;height:min(70vw,76vh);margin:auto}
+img{display:block;position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain}#message{position:absolute;top:0;right:0;bottom:0;left:0;display:grid;place-items:center;background:#111416;background:rgba(17,20,22,.91);color:#d4dadc;padding:24px;text-align:center}
+#message[hidden]{display:none}.actions{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+button,.mode{font:inherit;text-decoration:none;display:inline-block;color:inherit;background:#222a2e;border:1px solid #414c52;padding:10px 16px;border-radius:8px;cursor:pointer}button:hover,.mode:hover{background:#303b42}
+#view:fullscreen{max-height:none;border:0;border-radius:0;width:100vw;height:100vh;background:black}
+</style>
+<main>
+<header><div><div class="label">Halloween · Kamera</div><h1>Der Eingang im Blick.</h1></div><span id="state">Verbinde …</span></header>
+<div id="view"><img id="camera" alt="Livebild des Eingangs"><img id="camera-next" alt="Livebild des Eingangs" style="display:none"><div id="message">Kamera wird verbunden …</div></div>
+<div class="actions"><button id="fullscreen">Vollbild</button><button id="reconnect">Neu verbinden</button><a class="mode" id="mode" href="/?mode=tv">TV-Modus</a></div>
+<p>Liveansicht im Heimnetz · ohne Ton und Aufzeichnung</p>
+</main>
+<script>
+(function () {
+  // ES5 and XMLHttpRequest also work on older TV browser engines.
+  var camera = document.getElementById('camera');
+  var next = document.getElementById('camera-next');
+  var state = document.getElementById('state');
+  var message = document.getElementById('message');
+  var view = document.getElementById('view');
+  var link = document.getElementById('mode');
+  var explicitStream = /[?&]mode=stream(?:&|$)/.test(location.search);
+  var tv = /[?&]mode=tv(?:&|$)/.test(location.search) ||
+    (!explicitStream && /SmartTV|SMART-TV|Tizen|Maple/i.test(navigator.userAgent));
+  var failed = true, generation = 0, lastImage = 0;
+  var snapshotTimer = null, snapshotDeadline = null;
+  link.href = tv ? '/?mode=stream' : '/?mode=tv';
+  link.innerHTML = tv ? 'Stream-Modus' : 'TV-Modus';
+
+  function show(online) {
+    state.innerHTML = online ? (tv ? '&#9679; Live · TV-Modus' : '&#9679; Live') : '&#9679; Keine Verbindung';
+    state.className = online ? 'live' : '';
+    message.style.display = online ? 'none' : 'block';
+    message.innerHTML = 'Kein aktuelles Kamerabild. Verbindung wird automatisch erneut versucht …';
+  }
+
+  function loadSnapshot(token) {
+    if (token !== generation) return;
+    var target = next;
+    var finished = false;
+    function finish(ok) {
+      if (finished || token !== generation) return;
+      finished = true;
+      clearTimeout(snapshotDeadline);
+      target.onload = target.onerror = null;
+      if (ok) {
+        camera.style.display = 'none';
+        target.style.display = 'block';
+        next = camera;
+        camera = target;
+        lastImage = new Date().getTime();
+        show(true);
+      } else {
+        target.removeAttribute('src');
+        if (new Date().getTime() - lastImage > 3000) show(false);
+      }
+      snapshotTimer = setTimeout(function () { loadSnapshot(token); }, ok ? 100 : 500);
+    }
+    target.onload = function () { finish(true); };
+    target.onerror = function () { finish(false); };
+    snapshotDeadline = setTimeout(function () { finish(false); }, 3000);
+    target.src = '/snapshot.jpg?t=' + new Date().getTime();
+  }
+
+  function reconnect() {
+    generation += 1;
+    clearTimeout(snapshotTimer);
+    clearTimeout(snapshotDeadline);
+    camera.onload = camera.onerror = next.onload = next.onerror = null;
+    next.removeAttribute('src');
+    if (tv) {
+      loadSnapshot(generation);
+    } else {
+      camera.onerror = function () { failed = true; show(false); };
+      camera.src = '/stream.mjpg?t=' + new Date().getTime();
+      failed = false;
+    }
+  }
+
+  function check() {
+    if (tv) {
+      if (new Date().getTime() - lastImage > 3000) show(false);
+      setTimeout(check, 1000);
+      return;
+    }
+    var xhr = new XMLHttpRequest();
+    var finished = false;
+    function complete(online) {
+      if (finished) return;
+      finished = true;
+      if (online && failed) reconnect();
+      if (!online) failed = true;
+      show(online);
+      setTimeout(check, 1000);
+    }
+    xhr.open('GET', '/status?t=' + new Date().getTime(), true);
+    xhr.timeout = 2500;
+    xhr.onload = function () {
+      try { complete(xhr.status === 200 && JSON.parse(xhr.responseText).online); }
+      catch (error) { complete(false); }
+    };
+    xhr.onerror = xhr.ontimeout = function () { complete(false); };
+    xhr.send();
+  }
+
+  document.getElementById('reconnect').onclick = reconnect;
+  document.getElementById('fullscreen').onclick = function () {
+    var exit = document.exitFullscreen || document.webkitExitFullscreen;
+    var enter = view.requestFullscreen || view.webkitRequestFullscreen;
+    if ((document.fullscreenElement || document.webkitFullscreenElement) && exit) {
+      exit.call(document);
+    } else if (enter) {
+      enter.call(view);
+    } else {
+      // Fullscreen API is optional on TV browsers.
+      var full = view.getAttribute('data-full') !== 'yes';
+      view.setAttribute('data-full', full ? 'yes' : 'no');
+      view.style.cssText = full ? 'position:fixed;top:0;left:0;width:100%;height:100%;max-height:none;z-index:10;border:0;border-radius:0' : '';
+    }
+  };
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) reconnect(); });
+  reconnect();
+  check();
+}());
+</script>
+</html>

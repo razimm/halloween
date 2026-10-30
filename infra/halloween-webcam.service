@@ -1,0 +1,20 @@
+[Unit]
+Description=Halloween LAN webcam viewer
+After=network.target
+
+[Service]
+User=brain
+SupplementaryGroups=video
+WorkingDirectory=/home/brain/projects/halloween
+ExecStart=/usr/bin/python3 /home/brain/projects/halloween/tools/webcam.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+RestrictAddressFamilies=AF_INET AF_UNIX
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

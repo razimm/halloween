@@ -2,49 +2,69 @@
 
 Projekt zur automatischen Halloween-Show am Hauseingang. Ein wettergeschützter Buzzer startet Musik, Nebel und verschiedene Lichteffekte. Der Raspberry Pi koordiniert alles.
 
-**Stand 26.10.2026:** Erster Sound-/LED-Ablauf auf dem Pi erfolgreich getestet:
-KORAD KKG305P über USB und Audio über Logitech G433. Die übrige Showintegration
-ist noch offen. Halloween: 31.10.2026.
+**Stand 29.10.2026:** Vollständiger Showcontroller mit Simulation, Hama-Freigabe,
+KORAD-LED und Art-Net implementiert. Der gemeinsame Hardwaretest steht noch aus.
 
-## Getesteten Sound-/LED-Ablauf starten
+## Start
 
 ```bash
-./setup.sh                    # Einmalig: lokale Python-Umgebung einrichten
-./start-show.sh --simulate     # Ohne Gerätezugriff
-sudo ./start-show.sh           # Einmal Sound + LED, danach automatisch aus
+./setup.sh
+./start-show.sh --demo          # Vollständiger simulierter Ablauf, ohne Hardware/Ton
+./start-show.sh --simulate      # b = Buzzer, 1 = Freigabe, p = KORAD (je + Enter), q = Ende
+sudo ./start-show.sh --play     # Echte Hardware; Idle beginnt mit Musik und Licht
 ```
 
-Die lokale WAV liegt unter `audio/electric-zap.wav`. Bei einem frischen Clone
-siehe [Audio-Datei](audio/README.md). Der Start verwendet das Logitech-G433-Gerät,
-10 V Spannungsgrenze, maximal 500 mA und 20 % Audio-Sample-Amplitude.
-LED muss polrichtig angeschlossen sein und einen Kühlkörper haben.
-Abbruch mit **Strg+C**. Details und Testergebnisse: [Sound-Synchronisation](docs/sound-sync.md).
+Hintergrundmusik läuft im Idle als Loop mit **15 % Sample-Amplitude**, einstellbar
+über `background_gain` in `config/show.json` oder `--background-gain 0.15`.
+Die KORAD-LED leuchtet im Idle mit 300 mA, der Flat Par zeigt Grün mit 5 %.
+Die Show verwendet bis zu 700 mA und 100 % Flat-Par-Helligkeit; Show-Audio und
+Ansagen laufen mit 100 % Originalamplitude, Kirchenglocke mit 75 % und Lachen mit 60 %,
+Michael Myers mit 98 % Spitzenpegel. Die Spannungsgrenze bleibt bei 10 V.
+LED auf Kühlkörper und polrichtig anschließen. Abbruch mit **Strg+C**.
+Details: [Showablauf und Konfiguration](docs/show.md).
 
 ## Ablauf
-1. Kind drückt Buzzer am Eingang („Traust du dich? Drück mich!“).
-2. Pi startet eine konfigurierbare, etwa 35 Sekunden lange Show.
-3. Musik, DMX-Licht, Nebel und zusätzliche LED laufen zeitlich koordiniert.
-4. Während RUNNING bleiben weitere Tastendrücke ohne Reaktion. Im COOLDOWN löst ein erneuter Druck ausschließlich eine gruselige Sprachansage „Noch nicht!“ aus – nie die Hauptshow.
-5. Fehler oder Abbruch führen zu sicheren Ausgangszuständen.
+
+1. Buzzer stoppt die Hintergrundmusik und startet `electric-zap_break_final.mp3`.
+   Die KORAD-LED flackert und blendet in den letzten 0,5 Sekunden aus; sie ist zum Soundende aus. Ein früher weißer PAR-Impuls blendet über 0,5 Sekunden aus
+   und endet bereits 0,5 Sekunden vor Soundende; anschließend folgt eine Sekunde Pause.
+2. `church_bell_final.mp3`: drei orange PAR-Lichtimpulse mit 100 % auf den Gongs; KORAD bleibt aus.
+3. `michael_myers_final.mp3` mit Flat-Par-Lichtfolge über Art-Net.
+4. `laughing.wav`, danach gesperrt: KORAD-LED und Hintergrundmusik aus, Flat Par rot.
+5. Buzzer während der Sperre: dreimal rot blinken und eine zufällige Voice-Datei
+   vollständig abspielen; weitere Drücke währenddessen werden verworfen.
+6. Hama-Taste **1** gibt wieder frei: Grün und KORAD-LED blenden über zwei Sekunden auf. Eine laufende
+   Ansage endet zuerst, dann starten Hintergrundmusik und Buzzer-Bereitschaft.
+
+Kein automatischer Cooldown-Timer. Nebel/Servo sind noch nicht eingebunden.
 
 ## Technischer Überblick
 | Gerät | Plan |
 |---|---|
-| Raspberry Pi 4 Model B Rev 1.4, 8 GB | Debian 13.4, aarch64; Python-Controller geplant |
+| Raspberry Pi 4 Model B Rev 1.4, 8 GB | Debian 13.4, aarch64; Python-Showcontroller implementiert |
 | Roter Buzzer | Vorhanden; potentialfreier Schließer ausgemessen (offen / ca. 6 Ω gedrückt). GPIO17 vorgesehen. Startet **ausschließlich die vollständige automatische Show**. |
 | Nebelmaschine mit Kabel-Fernbedienung | Mechanischer DS3218-Servo hält den Taster für einen begrenzten Nebelstoß gedrückt; unabhängig abschaltbar. |
 | Miuzei DS3218 | Gewählter Servo statt SwitchBot; Pi-GPIO-PWM, separate 5-V-/3-A-Versorgung, Halterung und Rückstellung noch zu testen. |
 | KORAD KKG305P | USB-Steuerung und Sound-/LED-Ablauf erfolgreich getestet |
 | 10-W-Hochleistungs-LED | **Ohne eigene Stromregelung**; sichere Strombegrenzung erforderlich |
-| Showtec NET-2/3 / Flat Par QA5X | Vorgesehene Art-Net/DMX-Lichtsteuerung; Bestand/Kanalmodus verifizieren |
+| Showtec NET-2/3 / Flat Par QA5X | Art-Net an 192.168.178.146, Universe 1, A.001 / Ch.07 |
 | Audio | Logitech G433 USB für getesteten Sound-/LED-Ablauf; zusätzlicher HEOS 5 als geplanter Netzwerk-Soundplayer. |
 
-## Zwei getrennte Bedienwege
+## Bedienung
 
-- **Roter Buzzer draußen:** löst genau **eine komplette Halloween-Show** mit den dafür freigegebenen Effekten aus. Weitere Tastendrücke während der Show werden ignoriert; im Cooldown wird ausschließlich die Ansage „Noch nicht!“ ausgelöst (ohne Überlagerung).
-- **Hama-USB-Fernbedienung:** dient **nur für zusätzliche spontane Einzel-Sounds** (z. B. Lachen, Donner, elektrisches Knistern) auf dem Denon HEOS 5; **startet weder die Hauptshow noch Nebel oder Lichteffekte**. Netzwerksteuerung und Tastenbelegung sind noch zu testen.
+- **Roter Buzzer:** startet eine vollständige Show im freigegebenen Idle. Während
+  der Show ignoriert, bei Sperre nur Blink-/Voice-Rückmeldung.
+- **Hama-OFF:** Panic-Stopp: lokales Audio und HEOS stoppen, PAR aus, KORAD auf 300 mA.
+  Buzzer, OK und Play bleiben gesperrt.
+- **Hama-Taste 1:** Freigabe nach Showende oder Panic; startet normalen Idle-Betrieb, keine Show.
+- **Hama-Play/Pause:** KORAD im gesperrten Zustand an/aus; Einschalten mit
+  `electric-zap_up_final.mp3` und Strommodulation, danach 300 mA. Keine Showfreigabe.
+- **Hama-OK:** Lachen auf HEOS_Kueche über das Heimnetz, mit 10 % Lautstärke.
+- **Weitere Hama-Tasten:** noch nicht belegt.
 
 ## Dateien
+
+- [Vollständige Show: Bedienung, Einstellungen und Gerätetest](docs/show.md)
 - [Hardware](docs/hardware.md)
 - [Technische Architektur und Integrationen](docs/integrationen.md)
 - [Show-Ideen](docs/show-ideen.md)
@@ -53,11 +73,11 @@ Abbruch mit **Strg+C**. Details und Testergebnisse: [Sound-Synchronisation](docs
 - [Sound-/LED-Ablauf und Startanleitung](docs/sound-sync.md)
 - [Servo für die Nebelmaschine](docs/servo.md)
 - [Hama-Soundboard und HEOS 5](docs/heos-soundboard.md)
-- [Trust-Webcam / lokaler Nginx-HLS-Stream](docs/webcam.md)
+- [Trust-Webcam / lokale Browseransicht](docs/webcam.md)
 
 ## Eingangsbereich beobachten
 
-Eine vorhandene Trust-USB-Webcam soll per FFmpeg und Nginx/HLS **nur im Heimnetz** ein Livebild des Eingangs liefern, damit Besucher rechtzeitig bemerkt werden. Keine Aufzeichnung, keine Personenerkennung und keine automatische Showauslösung durch die Kamera. Details: [Webcam-Konzept](docs/webcam.md).
+Die Trust-USB-Webcam liefert per FFmpeg/MJPEG **im Heimnetz** eine Browseransicht mit geringer Pufferung: **http://192.168.178.130:8080/**. Der Dienst `halloween-webcam` startet automatisch mit dem Pi. Keine Aufzeichnung, keine Personenerkennung und keine automatische Showauslösung durch die Kamera. Details: [Webcam-Konzept](docs/webcam.md).
 
 ## Entwicklungsstrategie
 Zuerst jedes Gerät einzeln erkennen und gefahrlos testen. Danach eine Python-Zustandsmaschine mit Simulationsmodus und Timeline aufbauen. Später optional eine lokale Weboberfläche für Shows, Lautstärke und Testfunktionen.
@@ -72,6 +92,7 @@ bluetoothctl show
 
 Die Halloween-Titelmelodie (John Carpenter/Michael Myers) ist musikalische Inspiration. Keine geschützten Audiodateien ins Repository aufnehmen; Rechte für die Nutzung klären.
 
-## Rückmeldung während des Cooldowns
+## Softwaretests
 
-Keine grünen/roten Status-LEDs am Buzzer. Während die Show **RUNNING** ist, werden Tastendrücke still ignoriert. Im **COOLDOWN** bewirkt ein neuer Buzzer-Druck nur die gruselig gesprochene Audiodatei **„Noch nicht!“**. Solange die Ansage abgespielt wird, werden weitere Druckereignisse verworfen: **kein Neustart, kein Abschneiden, keine gleichzeitig abgespielten Instanzen, keine Warteschlange**. Nach Ende der Ansage kann ein weiterer Druck im weiterhin aktiven Cooldown die Ansage erneut auslösen. In **IDLE** startet der Buzzer wieder regulär die vollständige Show. Die Hama-Fernbedienung bleibt unabhängig für spontane HEOS-Sounds.
+`./test.sh` führt alle Tests aus. Bei Erfolg bleibt die Ausgabe leer; bei Fehlern
+erscheint das Testprotokoll und der Aufruf liefert einen Fehlerstatus.

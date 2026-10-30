@@ -25,8 +25,12 @@ Zeitpunkte sind vorläufig. Kein lautes Erschrecken direkt neben Kindern, keine 
 - Buzzer-Text im Konzept wurde durch dieses Motiv ersetzt.
 
 ## Interaktion
-**Roter Außen-Buzzer:** In IDLE startet er die vollständige Show. Während RUNNING bewirken zusätzliche Drücke nichts. Während COOLDOWN erklingt beim erneuten Drücken die gruselige Ansage **„Noch nicht!“**; die Show startet dabei nicht erneut. Läuft die Ansage bereits, werden weitere Drücke verworfen, damit der Satz vollständig und ohne Überlagerung erklingt. Endet die Ansage noch im Cooldown, darf sie bei einem weiteren Druck erneut abgespielt werden. Die separaten rot/grünen Status-LEDs werden nicht eingesetzt.
+**Roter Außen-Buzzer:** In IDLE startet er die vollständige Show. Während RUNNING
+werden weitere Drücke ignoriert. Nach Showende ist LOCKED aktiv: Flat Par rot,
+KORAD-LED und Hintergrundmusik aus. Ein Druck lässt den Flat Par dreimal rot
+blinken und spielt eine zufällige Voice-Datei vollständig, ohne Überlagerung.
+Kein automatischer Cooldown-Timer. Siehe [implementierter Ablauf](show.md).
 
-**Hama-Fernbedienung:** unabhängig davon spontane Einzelgeräusche auf dem HEOS 5, z. B. gruseliges Lachen, Schrei, Donner, Wolfsgeheul, knarrende Tür oder elektrisches *Bzzzt*. Keine Show-, Nebel- oder Lichtauslösung über die Hama-Fernbedienung. Überschneidungen zwischen spontanen Sounds und Show-Audio später bewusst festlegen.
+**Hama-Fernbedienung:** Taste 1 ist für die manuelle Freigabe reserviert (Flat Par grün und KORAD-LED an). Die übrigen Tasten können später unabhängig davon spontane Einzelgeräusche auf dem HEOS 5, z. B. gruseliges Lachen, Schrei, Donner, Wolfsgeheul, knarrende Tür oder elektrisches *Bzzzt*. Keine Show-, Nebel- oder Lichtauslösung über die Hama-Fernbedienung. Überschneidungen zwischen spontanen Sounds und Show-Audio später bewusst festlegen.
 
 Perspektivisch Weboberfläche für Shows, Lautstärke, Licht/Nebel ein/aus und Tests.

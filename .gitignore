@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 .venv/
 /audio/*.wav
+/audio/playback/
+/audio/*.mp3
+/audio/*.ogg
+/audio/*.flac
+/audio/*.m4a

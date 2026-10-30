@@ -1,0 +1,88 @@
+{
+  "audio_device": "plughw:CARD=Headset,DEV=0",
+  "background_gain": 0.15,
+  "show_gain": 1.0,
+  "bell_gain": 0.75,
+  "laugh_gain": 0.6,
+  "myers_gain": 1.6807285669423218,
+  "voice_gain": 1.0,
+  "serial_port": "/dev/serial/by-id/usb-Nuvoton_USB_Virtual_COM_001C1A770452-if00",
+  "buzzer_gpio": 17,
+  "buzzer_debounce_s": 0.05,
+  "remote_vendor": 1444,
+  "remote_product": 39041,
+  "remote_release_key": 79,
+  "remote_power_key": 164,
+  "remote_panic_key": 142,
+  "artnet": {
+    "host": "192.168.178.146",
+    "universe": 1,
+    "start_address": 1,
+    "channel_mode": 7,
+    "confirmed": true
+  },
+  "status_brightness": 0.5,
+  "korad_idle_current_A": 0.3,
+  "korad_max_current_A": 0.7,
+  "par_idle_brightness": 0.05,
+  "zap_fade_out_s": 0.5,
+  "zap_par_flash_s": 0.05,
+  "zap_par_flash_fade_s": 0.5,
+  "zap_par_flash_advance_s": 0.5,
+  "zap_bell_pause_s": 1.0,
+  "transition_s": 2.0,
+  "blink_half_period_s": 0.3,
+  "bell_lighting": {
+    "gong_times_s": [
+      0.08,
+      5.62,
+      11.1
+    ],
+    "color": [
+      255,
+      0,
+      0,
+      255
+    ],
+    "hold_s": 0.2,
+    "fade_out_s": 3.5
+  },
+  "myers_lighting": {
+    "period_s": 2.0,
+    "brightness": 1.0,
+    "minimum_brightness": 0.1,
+    "peak_hold_s": 0.25,
+    "colors": [
+      [
+        255,
+        0,
+        0,
+        0
+      ],
+      [
+        100,
+        0,
+        255,
+        0
+      ],
+      [
+        255,
+        0,
+        0,
+        35
+      ]
+    ],
+    "color_hold_s": 8.0
+  },
+  "remote_heos_key": 28,
+  "heos": {
+    "enabled": true,
+    "host": "192.168.178.30",
+    "player_id": 1491570931,
+    "name": "HEOS_Kueche",
+    "volume": 10,
+    "bind_host": "0.0.0.0",
+    "advertise_host": "192.168.178.130",
+    "http_port": 8081
+  }
+}

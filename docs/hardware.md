@@ -10,10 +10,10 @@
 - **DMX:** Showtec NET-2/3 Art-Net-Node und Flat Par QA5X als vorhandene Lichtprojekt-Geräte genannt; Anschluss/Kanalbelegung noch prüfen.
 - **LED-Kühlung:** Kühlkörper laut Benutzer montiert. 10 V / 900 mA wurden vom Benutzer als bisherige maximale Betriebswerte genannt, nicht als bestätigte Nennwerte.
 - **Audio:** Logitech G433 USB, Klinkenanschluss am Logitech-Gerät; ALSA `plughw:CARD=Headset,DEV=0`. Gemeinsame Sound-/LED-Wiedergabe vom Benutzer bestätigt.
-- **Hama-Multimedia-Fernbedienung:** vorhanden, mit kleinem rotem USB-Empfänger; als separate Steuerung für spontane Sounds vorgesehen. Eingabecodes am Pi noch nicht ermittelt.
+- **Hama-Multimedia-Fernbedienung:** vorhanden, mit kleinem rotem USB-Empfänger; Taste 1 für manuelle Showfreigabe, Play/Pause für KORAD-An/Aus bei Sperre; weitere Tasten später für spontane Sounds vorgesehen. USB-ID `05a4:9881` (Ortek VRC-1100); 1/2/3 und Play/Pause am Pi getestet, Details im Soundboard-Dokument.
 - **Denon HEOS 5:** im gleichen Heimnetz, laut Benutzer bereits über HEOS-App bedienbar. Geplante Wiedergabe von Einzel-Sounds über HEOS-Netzwerksteuerung; USB-Stick am HEOS als mögliche Medienquelle noch testen.
 
-- **Webcam:** ältere Trust-USB-Webcam mit Standfuß und sechs LEDs um das Objektiv auf Fotos bestätigt. Exaktes Modell, V4L2-Unterstützung, Auflösung und LED-Typ offen. Geplant als reine LAN-Livebildquelle am Eingang; Nginx/HLS, ohne Aufnahme.
+- **Webcam:** ältere Trust-USB-Webcam mit Standfuß und sechs LEDs um das Objektiv auf Fotos bestätigt. USB-ID `0c45:6340`; uvcvideo/V4L2 und FFmpeg-Bildempfang bei 640 × 480 getestet. Exaktes Handelsmodell, Bildqualität und LED-Typ offen. Geplant als reine LAN-Livebildquelle am Eingang; Nginx/HLS, ohne Aufnahme.
 
 ## Konzeptioneller Aufbau
 ```text
@@ -23,7 +23,7 @@ Buzzer --> Pi GPIO
                |-- Ethernet/Art-Net --> DMX-Node --> LED-PAR
                |-- USB-Audio --> Logitech G433 (Show-Audio)
                '-- LAN/WLAN --> HEOS 5 (spontane Sounds)
-Hama-USB-Empfänger --> Pi --> nur spontane Sounds auf HEOS 5
+Hama-USB-Empfänger --> Pi --> Taste 1: Showfreigabe; übrige Tasten später HEOS
 ```
 
 ## Zu prüfen
@@ -35,6 +35,10 @@ Hama-USB-Empfänger --> Pi --> nur spontane Sounds auf HEOS 5
 6. DMX-IP, Universum, Startadresse und Kanalmodus.
 7. Hama-Empfänger und Tastenereignisse prüfen; HEOS-IP und USB-Mediennavigation ermitteln; wetterfeste/zugentlastete Montage.
 
-## Buzzer-Status ohne zusätzliche LEDs
+## Buzzer-Status am Flat Par
 
-Die ehemals geplanten zwei diskreten rot/grünen Status-LEDs werden **nicht verwendet**. Rückmeldung im Cooldown erfolgt ausschließlich über eine gruselige gesprochene **„Noch nicht!“**-Audiodatei beim erneuten Drücken des roten Buzzers. Die vorhandene 10-W-Hochleistungs-LED für die Lichteffekte bleibt davon **unberührt**. Audio-Ausgabegerät/Datei nach Funktionstest festlegen.
+Keine zusätzlichen rot/grünen Status-LEDs am Buzzer. Der Flat Par QA5X zeigt
+Grün bei Freigabe, Rot während der manuellen Sperre und drei rote Blinkzyklen
+bei Buzzer-Druck während der Sperre. Gleichzeitig läuft zufällig eine der drei
+Voice-Ansagen vollständig. Hama-Taste 1 gibt frei; die KORAD-LED geht sofort an.
+Details und bestätigte Netzwerkeinstellungen: [Showcontroller](show.md).

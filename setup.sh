@@ -7,5 +7,10 @@ if ! command -v aplay >/dev/null; then
   echo 'aplay fehlt: bitte alsa-utils installieren.' >&2
   exit 1
 fi
+if ! command -v ffmpeg >/dev/null; then
+  echo 'ffmpeg fehlt: bitte ffmpeg für die MP3-Dekodierung installieren.' >&2
+  exit 1
+fi
 echo 'Bereit. Simulation: ./start-show.sh --simulate'
-echo 'Sound und LED: sudo ./start-show.sh'
+echo 'Echte Show: sudo ./start-show.sh --play'
+echo 'Schnelldemo ohne Hardware: ./start-show.sh --demo'

@@ -1,472 +1,592 @@
 {
-  "source": "https://www.youtube.com/watch?v=Zfcaj7M0Qnk",
-  "duration_s": 7.4188125,
+  "source": "electric-zap_break_final.mp3",
+  "duration_s": 9.335056689342403,
   "voltage_ceiling_V": 10.0,
-  "max_current_A": 0.5,
+  "max_current_A": 0.7,
   "events": [
     {
       "time_s": 0.0,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.35,
+      "zap": true
     },
     {
       "time_s": 0.08,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.473,
+      "zap": true
     },
     {
       "time_s": 0.16,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.412,
+      "zap": true
     },
     {
       "time_s": 0.24,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.58,
+      "zap": true
     },
     {
       "time_s": 0.32,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.656,
+      "zap": true
     },
     {
       "time_s": 0.4,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.662,
+      "zap": true
     },
     {
       "time_s": 0.48,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.38,
+      "zap": true
     },
     {
       "time_s": 0.56,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.275,
+      "zap": true
     },
     {
       "time_s": 0.64,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.367,
+      "zap": true
     },
     {
       "time_s": 0.72,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 0.8,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 0.88,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 0.96,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 1.04,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 1.12,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 1.2,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 1.28,
-      "current_A": 0.215,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 1.36,
-      "current_A": 0.368,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 1.44,
-      "current_A": 0.312,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 1.52,
-      "current_A": 0.417,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 1.6,
-      "current_A": 0.46,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 1.68,
-      "current_A": 0.5,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 1.76,
-      "current_A": 0.32,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 1.84,
-      "current_A": 0.22,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 1.92,
-      "current_A": 0.277,
+      "current_A": 0.132,
       "zap": true
     },
     {
       "time_s": 2.0,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.53,
+      "zap": true
     },
     {
       "time_s": 2.08,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.483,
+      "zap": true
     },
     {
       "time_s": 2.16,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.346,
+      "zap": true
     },
     {
       "time_s": 2.24,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.24,
+      "zap": true
     },
     {
       "time_s": 2.32,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 2.4,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 2.48,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 2.56,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 2.64,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 2.72,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 2.8,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 2.88,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 2.96,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 3.04,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 3.12,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 3.2,
-      "current_A": 0.08,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 3.28,
-      "current_A": 0.355,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 3.36,
-      "current_A": 0.387,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 3.44,
-      "current_A": 0.277,
-      "zap": true
+      "current_A": 0.7,
+      "zap": false
     },
     {
       "time_s": 3.52,
-      "current_A": 0.182,
+      "current_A": 0.528,
       "zap": true
     },
     {
       "time_s": 3.6,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.533,
+      "zap": true
     },
     {
       "time_s": 3.68,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.657,
+      "zap": true
     },
     {
       "time_s": 3.76,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.497,
+      "zap": true
     },
     {
       "time_s": 3.84,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.248,
+      "zap": true
     },
     {
       "time_s": 3.92,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.468,
+      "zap": true
     },
     {
       "time_s": 4.0,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.3,
+      "zap": true
     },
     {
       "time_s": 4.08,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 4.16,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 4.24,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 4.32,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 4.4,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 4.48,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 4.56,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 4.64,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.288,
+      "zap": true
     },
     {
       "time_s": 4.72,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.493,
+      "zap": true
     },
     {
       "time_s": 4.8,
-      "current_A": 0.359,
+      "current_A": 0.424,
       "zap": true
     },
     {
       "time_s": 4.88,
-      "current_A": 0.406,
+      "current_A": 0.56,
       "zap": true
     },
     {
       "time_s": 4.96,
-      "current_A": 0.457,
+      "current_A": 0.623,
       "zap": true
     },
     {
       "time_s": 5.04,
-      "current_A": 0.415,
+      "current_A": 0.685,
       "zap": true
     },
     {
       "time_s": 5.12,
-      "current_A": 0.189,
+      "current_A": 0.417,
       "zap": true
     },
     {
       "time_s": 5.2,
-      "current_A": 0.342,
+      "current_A": 0.292,
       "zap": true
     },
     {
       "time_s": 5.28,
-      "current_A": 0.225,
+      "current_A": 0.37,
       "zap": true
     },
     {
       "time_s": 5.36,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.229,
+      "zap": true
     },
     {
       "time_s": 5.44,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.519,
+      "zap": true
     },
     {
       "time_s": 5.52,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.57,
+      "zap": true
     },
     {
       "time_s": 5.6,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.654,
+      "zap": true
     },
     {
       "time_s": 5.68,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.47,
+      "zap": true
     },
     {
       "time_s": 5.76,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.119,
+      "zap": true
     },
     {
       "time_s": 5.84,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.476,
+      "zap": true
     },
     {
       "time_s": 5.92,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.266,
+      "zap": true
     },
     {
       "time_s": 6.0,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.08,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.16,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.24,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.32,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.4,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.48,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.56,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.64,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.72,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.8,
-      "current_A": 0.5,
+      "current_A": 0.7,
       "zap": false
     },
     {
       "time_s": 6.88,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.237,
+      "zap": true
     },
     {
       "time_s": 6.96,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.587,
+      "zap": true
     },
     {
       "time_s": 7.04,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.46,
+      "zap": true
     },
     {
       "time_s": 7.12,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.252,
+      "zap": true
     },
     {
       "time_s": 7.2,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.283,
+      "zap": true
     },
     {
       "time_s": 7.28,
-      "current_A": 0.5,
-      "zap": false
+      "current_A": 0.544,
+      "zap": true
     },
     {
       "time_s": 7.36,
-      "current_A": 0.5,
+      "current_A": 0.621,
+      "zap": true
+    },
+    {
+      "time_s": 7.44,
+      "current_A": 0.602,
+      "zap": true
+    },
+    {
+      "time_s": 7.52,
+      "current_A": 0.427,
+      "zap": true
+    },
+    {
+      "time_s": 7.6,
+      "current_A": 0.308,
+      "zap": true
+    },
+    {
+      "time_s": 7.68,
+      "current_A": 0.461,
+      "zap": true
+    },
+    {
+      "time_s": 7.76,
+      "current_A": 0.29,
+      "zap": true
+    },
+    {
+      "time_s": 7.84,
+      "current_A": 0.537,
+      "zap": true
+    },
+    {
+      "time_s": 7.92,
+      "current_A": 0.593,
+      "zap": true
+    },
+    {
+      "time_s": 8.0,
+      "current_A": 0.624,
+      "zap": true
+    },
+    {
+      "time_s": 8.08,
+      "current_A": 0.467,
+      "zap": true
+    },
+    {
+      "time_s": 8.16,
+      "current_A": 0.24,
+      "zap": true
+    },
+    {
+      "time_s": 8.24,
+      "current_A": 0.477,
+      "zap": true
+    },
+    {
+      "time_s": 8.32,
+      "current_A": 0.7,
+      "zap": true
+    },
+    {
+      "time_s": 8.4,
+      "current_A": 0.178,
+      "zap": true
+    },
+    {
+      "time_s": 8.48,
+      "current_A": 0.081,
+      "zap": true
+    },
+    {
+      "time_s": 8.56,
+      "current_A": 0.504,
+      "zap": true
+    },
+    {
+      "time_s": 8.64,
+      "current_A": 0.134,
+      "zap": true
+    },
+    {
+      "time_s": 8.72,
+      "current_A": 0.195,
+      "zap": true
+    },
+    {
+      "time_s": 8.8,
+      "current_A": 0.17,
+      "zap": true
+    },
+    {
+      "time_s": 8.88,
+      "current_A": 0.251,
+      "zap": true
+    },
+    {
+      "time_s": 8.96,
+      "current_A": 0.135,
+      "zap": true
+    },
+    {
+      "time_s": 9.04,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 9.12,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 9.2,
+      "current_A": 0.7,
+      "zap": false
+    },
+    {
+      "time_s": 9.28,
+      "current_A": 0.7,
       "zap": false
     }
   ]
