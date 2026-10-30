@@ -7,7 +7,7 @@ Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effek
 - [x] Großen roten Buzzer auswählen und Schließerkontakt messen (offen / ca. 6 Ω gedrückt).
 - [ ] Buzzer per GPIO17 mit internem Pull-up testen; Außenmontage/Wetterschutz fertigstellen.
 - [ ] Nebel-Fernbedienung dokumentieren; Tastenkraft und Haltezeit feststellen.
-- [x] **DS3218-Servo statt SwitchBot** als Nebel-Aktuator wählen.
+- [x] **MS24-UF-Servo statt SwitchBot** als Nebel-Aktuator wählen.
 - [ ] Separate 5-V-/3-A-Versorgung, Halterung, Kalibrierung und sichere Freigabe des Servos testen.
 - [ ] LED-Datenblatt, Kühlung und zulässige Stromwerte prüfen.
 - [ ] KORAD bei eingeschalteter LED: CC/CV und tatsächliche Werte messen.
@@ -22,7 +22,7 @@ Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effek
 - [x] LED-Funktion und Lichtmuster bis 500 mA Stromvorgabe testen.
 - [x] Elektrischen Zap-Sound mit LED synchronisieren; vom Benutzer als passend bestätigt.
 - [ ] KORAD-Schalten ohne LED / mit geeigneter Prüflast auf Latenz und Stromspitzen testen.
-- [ ] DS3218 zunächst ohne Nebelmaschine bewegen; danach Taster unter Aufsicht drücken und zuverlässiges Freigeben prüfen.
+- [ ] MS24-UF zunächst ohne Nebelmaschine bewegen; danach Taster unter Aufsicht drücken und zuverlässiges Freigeben prüfen.
 - [ ] Nebel-Fernbedienung nur kurz und kontrolliert mechanisch auslösen.
 - [ ] Art-Net-Gerät ansprechen und unkritische Lichtstimmung testen.
 
