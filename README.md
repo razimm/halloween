@@ -44,7 +44,7 @@ Kein automatischer Cooldown-Timer. Nebel/Servo sind noch nicht eingebunden.
 | Raspberry Pi 4 Model B Rev 1.4, 8 GB | Debian 13.4, aarch64; Python-Showcontroller implementiert |
 | Roter Buzzer | Vorhanden; potentialfreier Schließer ausgemessen (offen / ca. 6 Ω gedrückt). GPIO17 vorgesehen. Startet **ausschließlich die vollständige automatische Show**. |
 | Nebelmaschine mit Kabel-Fernbedienung | Mechanischer DS3218-Servo hält den Taster für einen begrenzten Nebelstoß gedrückt; unabhängig abschaltbar. |
-| Miuzei DS3218 | Gewählter Servo statt SwitchBot; Pi-GPIO-PWM, separate 5-V-/3-A-Versorgung, Halterung und Rückstellung noch zu testen. |
+| Miuzei MS24-UF | Gewählter Servo statt SwitchBot; Pi-GPIO-PWM, separate 5-V-/3-A-Versorgung, Halterung und Rückstellung noch zu testen. |
 | KORAD KKG305P | USB-Steuerung und Sound-/LED-Ablauf erfolgreich getestet |
 | 10-W-Hochleistungs-LED | **Ohne eigene Stromregelung**; sichere Strombegrenzung erforderlich |
 | Showtec NET-2/3 / Flat Par QA5X | Art-Net an 192.168.178.146, Universe 1, A.001 / Ch.07 |
