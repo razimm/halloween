@@ -13,7 +13,9 @@ IDLE --Buzzer--> RUNNING --Showende--> LOCKED --Hama 1--> IDLE
 
 Eine Ansage läuft vollständig zu Ende. Bei Freigabe während der Ansage wechseln
 beide Lampen sofort; Hintergrundmusik und Buzzer warten bis zum Ansageende.
-Kein automatischer Cooldown. Buzzer während RUNNING wird verworfen.
+Kein automatischer Cooldown. Im gesperrten Zustand beginnt nach fünf Sekunden
+ein Hintergrundloop mit 15 %, ohne Freigabe der Show. Voice und Zap-up haben
+Vorrang auf dem lokalen Audioausgang. Buzzer während RUNNING wird verworfen.
 
 ## GPIO-Buzzer
 
@@ -39,7 +41,7 @@ Python sendet Art-Net an Showtec-Node; DMX-Kanalbelegung vorab einmessen. Sicher
 ## Musik und separates Soundboard
 
 Alle Show-, Hintergrund- und Voice-Dateien laufen über den lokalen Logitech-G433-Pfad.
-Idle-Hintergrundmusik: einstellbare 15 % Sample-Amplitude; Zap/Voice 100 %, Kirchenglocke 75 %, Lachen 60 %, Michael Myers mit 98 % Spitzenpegel (ohne Sample-Clipping). Im Idle: PAR 5 %, KORAD 300 mA; in der Show bis 100 % (KORAD maximal 700 mA). KORAD blendet in den letzten 0,5 Sekunden des Zap-Sounds aus. Reihenfolge: Zap → Kirchenglocke → Myers → Lachen.
+Idle-Hintergrundmusik: einstellbare 15 % Sample-Amplitude; Zap/Voice 100 %, Kirchenglocke 75 %, Lachen 40 %, Michael Myers mit 98 % Spitzenpegel (ohne Sample-Clipping). Im Idle: PAR 5 %, KORAD 300 mA; in der Show bis 100 % (KORAD maximal 700 mA). KORAD blendet in den letzten 0,5 Sekunden des Zap-Sounds aus. Reihenfolge: Zap → Kirchenglocke → Myers → Lachen.
 Hama-Taste 1 ist für Freigabe reserviert; Play/Pause steuert KORAD bei Sperre.
 OK spielt Lachen auf HEOS_Kueche. Für jeden weiteren Sound gelten die
 [verbindlichen HEOS-Vorgaben](heos-soundboard.md#verbindliche-vorgaben-für-neue-sounds):

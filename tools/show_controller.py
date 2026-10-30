@@ -41,6 +41,8 @@ class Show:
         self.resume_audio = resume_audio
         self.panic_at = 0
         self.panic_release_requested = False
+        self.locked_background = False
+        self.locked_background_at = None
 
     def status_color(self, color, fade=True):
         gain = (self.config['par_idle_brightness'] if color == GREEN
@@ -52,6 +54,8 @@ class Show:
             self.lighting.color(target)
 
     def start(self):
+        self.locked_background = False
+        self.locked_background_at = None
         self.supply.bright(fade_s=self.config['transition_s'],
                            current_A=self.config['korad_idle_current_A'])
         self.state = 'IDLE'
@@ -71,6 +75,7 @@ class Show:
             self.stage = 0
             self.begin_stage()
         elif self.state == 'LOCKED' and self.blink_started is None:
+            self.stop_locked_background()
             self.voice = True
             self.blink_started = self.clock()
             self.audio.start(self.choose(VOICES))
@@ -96,13 +101,18 @@ class Show:
             self.log('Freigabe: grün; laufende Audiodatei endet zuerst')
         else:
             self.state = 'IDLE'
-            self.audio.start(BACKGROUND)
+            if not self.locked_background or self.audio.done():
+                self.audio.start(BACKGROUND)
+            self.locked_background = False
+            self.locked_background_at = None
             self.log('IDLE: manuell freigegeben')
 
     def panic(self):
         self.state = 'PANIC'
         self.panic_at = time.time()
         self.panic_release_requested = False
+        self.locked_background = False
+        self.locked_background_at = None
         self.voice = False
         self.manual_powering = False
         self.manual_light_on = False
@@ -122,6 +132,35 @@ class Show:
                     self.log(f'PANIC: {name} konnte nicht umgestellt werden: {error}')
         self.log('PANIC: alles gestoppt, nur KORAD 300 mA; Freigabe mit Taste 1')
 
+    def enter_locked(self):
+        self.state = 'LOCKED'
+        self.manual_light_on = False
+        self.locked_background = False
+        self.locked_background_at = self.clock() + self.config['locked_background_delay_s']
+        self.status_color(RED)
+        self.log('LOCKED: rot; Freigabe nur über Hama-Taste 1')
+
+    def stop_locked_background(self):
+        if self.locked_background:
+            self.audio.stop()
+            self.locked_background = False
+
+    def finish(self, pressed_at=None):
+        """Key 2 selects the same locked mode as the regular show ending."""
+        if self.state in ('PANIC', 'STOPPED'):
+            return
+        if pressed_at is not None and pressed_at <= self.panic_at:
+            return
+        # A voice response must still finish fully. Operator mode selection
+        # can abort main-show/background audio and the manual power-up effect.
+        if not self.voice:
+            self.audio.stop()
+        self.manual_powering = False
+        self.blink_started = None
+        self.pause_until = None
+        self.supply.off(fade_s=self.config['transition_s'])
+        self.enter_locked()
+
     def resume_from_panic(self):
         if self.resume_audio is not None and not self.resume_audio():
             return
@@ -140,6 +179,7 @@ class Show:
         else:
             if not self.up_times:
                 raise RuntimeError('Power-up audio timeline is unavailable')
+            self.stop_locked_background()
             self.supply.bright(current_A=.001)
             self.audio.start(ZAP_UP)
             self.up_started = self.clock()
@@ -203,10 +243,7 @@ class Show:
                 if self.stage != 0 or now >= self.pause_until:
                     self.stage += 1
                     if self.stage == len(STAGES):
-                        self.state = 'LOCKED'
-                        self.manual_light_on = False
-                        self.status_color(RED)
-                        self.log('LOCKED: rot; Freigabe nur über Hama-Taste 1')
+                        self.enter_locked()
                     else:
                         self.begin_stage()
             elif self.stage == 0:
@@ -240,6 +277,8 @@ class Show:
                 self.voice = False
             if self.state == 'RELEASING' and not self.voice and not self.manual_powering:
                 self.state = 'IDLE'
+                self.locked_background = False
+                self.locked_background_at = None
                 self.audio.start(BACKGROUND)
                 self.log('IDLE: Ansage vollständig beendet, Buzzer bereit')
             elif self.blink_started is not None:
@@ -250,6 +289,11 @@ class Show:
                     self.status_color(RED, fade=False)
                 else:
                     self.status_color(RED if step % 2 else BLACK, fade=False)
+            if (self.state == 'LOCKED' and not self.voice and not self.manual_powering
+                    and self.locked_background_at is not None
+                    and now >= self.locked_background_at and self.audio.done()):
+                self.audio.start(BACKGROUND)
+                self.locked_background = True
         self.supply.tick(now)
         self.lighting.tick(now)
 
@@ -257,6 +301,8 @@ class Show:
         self.state = 'STOPPED'
         self.manual_powering = False
         self.manual_light_on = False
+        self.locked_background = False
+        self.locked_background_at = None
         # Always attempt every cleanup, even after an audio/USB/network error.
         try:
             self.audio.stop()

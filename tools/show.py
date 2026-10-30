@@ -28,6 +28,8 @@ def dispatch_events(show, heos, events):
             show.buzzer()
         elif event == 'release':
             show.release(pressed_at=pressed_at)
+        elif event == 'finish':
+            show.finish(pressed_at=pressed_at)
         elif event == 'power':
             show.power()
         elif event == 'heos' and show.state != 'PANIC':
@@ -57,6 +59,9 @@ def demo(config, tracks, zap, up):
                 now[0] += .02
                 show.tick()
         assert show.state == 'LOCKED', show.state
+        now[0] += config['locked_background_delay_s']
+        show.tick()
+        assert show.locked_background and show.state == 'LOCKED'
         show.power()
         for _ in range(round(tracks[ZAP_UP]['duration'] / .02) + 2):
             now[0] += .02
@@ -78,6 +83,10 @@ def demo(config, tracks, zap, up):
         show.buzzer()
         show.power()
         assert show.state == 'PANIC'
+        show.release()
+        assert show.state == 'IDLE'
+        show.finish()
+        assert show.state == 'LOCKED' and audio.done()
         show.release()
         assert show.state == 'IDLE'
         print('Demo bestanden: Show, Sperre, Freigabe und Panic-Stopp mit Rückkehr zu Idle.')
@@ -137,7 +146,7 @@ def main():
                     panic_audio=heos.panic if heos else None,
                     resume_audio=heos.resume if heos else None)
         show.start()
-        print('Simulation: b = Buzzer, 1 = Freigabe, p = KORAD, o = HEOS, x = PANIC (je + Enter), q = Ende'
+        print('Simulation: b = Buzzer, 1 = Idle, 2 = Show fertig, p = KORAD, o = HEOS, x = PANIC (je + Enter), q = Ende'
               if simulate else 'Show bereit; Abbruch mit Strg+C.')
         while True:
             if simulate:
@@ -147,8 +156,8 @@ def main():
                     if not line or line.strip() == 'q':
                         break
                     command = line.strip()
-                    if command in ('b', '1', 'p', 'o', 'x'):
-                        events.append({'b': 'buzzer', '1': 'release', 'p': 'power',
+                    if command in ('b', '1', '2', 'p', 'o', 'x'):
+                        events.append({'b': 'buzzer', '1': 'release', '2': 'finish', 'p': 'power',
                                        'o': 'heos', 'x': 'panic'}[command])
             else:
                 events = inputs.poll()

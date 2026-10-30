@@ -8,6 +8,11 @@
 - **Laut fotografierter Originalanleitung:** Weiß = Signal, Rot = Plus, Schwarz = Minus/GND. Polarität vor dem Einschalten kontrollieren.
 - Für den ersten Test ohne Servohebel und ohne Kontakt zur Fernbedienung mit kleinem Bewegungsbereich beginnen; erst danach Endpositionen vorsichtig kalibrieren.
 - Ein einzelner Servo kann prinzipiell per GPIO angesteuert werden. Bei PWM-Zittern wäre ein separater PWM-Controller optional.
+- Der Servotest nutzt jetzt Hardware-PWM0 an GPIO18 über Linux-sysfs statt
+  Software-PWM. Boot-Konfiguration unter `[all]`: `dtparam=audio=off` und
+  `dtoverlay=pwm,pin=18,func=2`. Anschließend ist ein Neustart erforderlich.
+  Der analoge Pi-Audioausgang teilt die PWM-Hardware und wird deshalb
+  deaktiviert; USB-Audio für die Show bleibt verfügbar.
 
 ## Mechanik
 - Fest am Gehäuse der Fernbedienung montierter Servo mit kurzem Hebel und weicher Druckspitze.
@@ -29,7 +34,42 @@
 - Test zunächst ohne Nebel, dann kurze beaufsichtigte Nebelstöße bei ausreichender Sicht und gemäß Herstellergrenzen.
 - Software soll eine maximale Druckzeit, Sperrzeit und sichere Abbruchbehandlung vorsehen.
 
-**Status:** MS24-UF ist anhand von Verpackung, Anleitung und Fotos des vorhandenen Servos bestätigt; mechanischer Aufbau auf Holzträger ist fotografiert. Sichere Funktion und Nebelmaschinen-Test noch nicht bestätigt. Kein Code in dieser Datei – Implementierung mit Codex.
+## Erster Bewegungstest
+
+Servo ist laut Rückmeldung angeschlossen. Vor dem Test Hebel abnehmen und
+Nebelmaschinen-Taster frei lassen. Auch die erste Fahrt zur Mitte kann einen
+größeren Weg zurücklegen, wenn die Welle anders steht.
+
+```bash
+sudo .venv/bin/python -m tools.servo_test
+```
+
+Mit `m` und Enter zunächst die Mitte (1500 µs) anfahren. Danach einzeln `l`
+(1450 µs), `m`, `r` (1550 µs), `m` testen. Jeder Befehl sendet bei 50 Hz nur
+eine Sekunde lang Pulse; danach entfällt die aktive Positionshaltung.
+`q`, Strg+C oder SIGTERM beendet den Test und gibt PWM0 frei. Die Pulse werden
+nach jeder Bewegung abgeschaltet; während der Eingabe wartet der Test ohne
+aktives Steuersignal. Hardware-PWM stoppt bei einem harten Prozessabbruch
+(SIGKILL) nicht von selbst: bei einem solchen Fehler Servoversorgung trennen.
+Bei Brummen ohne Bewegung, Anschlag oder starker Erwärmung Versorgung trennen.
+
+Dies ist ein isolierter Konsolentest, noch keine Showintegration; die Hama
+steuert diesen Test nicht. Der bestehende Showbetrieb bleibt unverändert.
+Für den späteren Betrieb muss der Servo auch OFF/PANIC und Taste 2 beachten.
+Der erste Test mit Software-PWM zeigte Zappeln während der Bewegung.
+Mit Hardware-PWM erneut prüfen; bei weiterem Zittern Versorgung und Mechanik
+prüfen, bevor ein Tastendruck kalibriert wird.
+
+Technische Grundlage: [Linux-PWM-sysfs-Schnittstelle](https://www.kernel.org/doc/html/latest/driver-api/pwm.html).
+
+**Status:** MS24-UF anhand von Verpackung, Anleitung und Gerätefotos bestätigt;
+mechanischer Aufbau auf Holzträger fotografiert. Verdrahtung und Bewegung bestätigt. Hardware-PWM beseitigt laut
+Rückmeldung das Zappeln, aber jeder der Befehle `m`, `l`, `r` führt zu großen,
+wechselnden Hin- und Rückbewegungen statt reproduzierbaren kleinen Winkeln.
+Ursache offen: Versorgung und Verhalten beim Signalabschalten prüfen;
+die genaue Hersteller-Suffix-Zuordnung ist unten dokumentiert. Noch keine verlässliche Positionssteuerung bestätigt;
+Hebel und Nebeltaster bis zur Klärung nicht koppeln. Kalibrierung,
+Nebelbetätigung und Showintegration stehen aus.
 
 ## Eigene Gerätefotos
 

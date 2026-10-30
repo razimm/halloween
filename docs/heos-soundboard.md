@@ -19,7 +19,7 @@ Bestätigt am 30.10.2026:
 Der Effekt ist unabhängig von Show, Buzzer und lokaler Audiowiedergabe. OK ist
 auch während der Hauptshow nutzbar, beeinflusst weder KORAD noch PAR und gibt
 die Show nicht frei. Die Lautstärke der lokalen Show bleibt unverändert:
-Das dortige `laugh_gain: 0.6` gilt nur für den lokalen Ausgang. HEOS verwendet
+Das dortige `laugh_gain: 0.4` gilt nur für den lokalen Ausgang. HEOS verwendet
 hier das Original mit eigener Lautstärke 10 %.
 
 ## Tasten und Mehrfachdrücke
@@ -27,6 +27,7 @@ hier das Original mit eigener Lautstärke 10 %.
 | Taste | Funktion |
 | --- | --- |
 | 1 / KEY_KP1 (79) | Show nach Ende freigeben |
+| 2 / KEY_KP2 (80) | Manueller Zustand „Show fertig“: KORAD aus, PAR rot, gesperrt |
 | Play/Pause / KEY_PLAYPAUSE (164) | KORAD während Sperre manuell an/aus |
 | OFF / KEY_SLEEP (142) | Panic: alle Effekte stoppen, bis Taste 1 wieder freigibt |
 | OK / KEY_ENTER (28) | Einmal Lachen auf HEOS_Kueche |

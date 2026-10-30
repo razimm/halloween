@@ -27,7 +27,7 @@ Zeitpunkte sind vorläufig. Kein lautes Erschrecken direkt neben Kindern, keine 
 ## Interaktion
 **Roter Außen-Buzzer:** In IDLE startet er die vollständige Show. Während RUNNING
 werden weitere Drücke ignoriert. Nach Showende ist LOCKED aktiv: Flat Par rot,
-KORAD-LED und Hintergrundmusik aus. Ein Druck lässt den Flat Par dreimal rot
+KORAD-LED aus; Hintergrundmusik startet nach fünf Sekunden wieder mit 15 % im Loop. Ein Druck lässt den Flat Par dreimal rot
 blinken und spielt eine zufällige Voice-Datei vollständig, ohne Überlagerung.
 Kein automatischer Cooldown-Timer. Siehe [implementierter Ablauf](show.md).
 

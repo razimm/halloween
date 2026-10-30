@@ -41,6 +41,7 @@ Zieldatum: **31.10.2026**. Priorität: sichere Grundversion vor optionalen Effek
 - [ ] Sicherer Fehlerzustand und Logging.
 - [x] Hama-USB-Empfänger erkennen (`05a4:9881`); 1/2/3 und Play/Pause getestet.
 - [x] OFF (KEY_SLEEP, 142) als Panic-Stopp mit Rückkehr über Taste 1 implementiert.
+- [x] Taste 2: manueller Wechsel in den gesperrten Show-Endzustand.
 - [ ] Übrige Hama-Tasten nach Bedarf zuordnen.
 - [x] HEOS_Kueche per Netzwerk erkannt; OK spielt Lachen per HTTP vom Pi bei 10 %.
 - [ ] Wiederanlauf nach längerer Standby-Zeit prüfen; weitere Soundtasten optional.

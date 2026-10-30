@@ -37,3 +37,10 @@ und KORAD auf 300 mA. Keine automatische Wiederaufnahme; nur ein neuer Druck
 auf Taste 1 gibt den normalen Idle-Betrieb frei. Neue Effekte/Aktoren müssen
 ebenfalls diesen Stopppfad unterstützen. Bereits gestartete oder vorgemerkte
 Netzwerkaktionen dürfen nach dem Stopp keine verspätete Wiedergabe auslösen.
+Taste 2 (`KEY_KP2`, 80) stellt den normalen Show-Endzustand LOCKED her:
+lokale Show aus, KORAD aus, PAR rot. Nach fünf Sekunden läuft die
+Hintergrundmusik mit 15 % im Loop, ohne die Show freizugeben. Vor Voice-Ansagen
+und Zap-up die Musik unterbrechen, danach wieder starten; keine Überlagerung
+auf dem lokalen Audioausgang. PANIC stoppt und verwirft auch diesen Musikstart.
+Taste 2 hebt PANIC nicht auf.
+Neue Showaktoren müssen auch bei diesem manuellen Showende zurückgesetzt werden.

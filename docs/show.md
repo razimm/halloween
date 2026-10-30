@@ -31,7 +31,7 @@ KORAD-Ports durch mehrere Programme. GPIO17 verwendet einen internen Pull-up.
 | --- | --- | --- | --- | --- |
 | IDLE | Loop, 15 % | 300 mA, maximal 10 V | Grün (5 %) | Show starten |
 | RUNNING | Aus | Beim Zap flackern (bis 700 mA), zum Soundende aus; danach aus | Showeffekte | Ignorieren |
-| LOCKED | Aus | Aus; Play/Pause erlaubt manuelles An/Aus | Rot | Zufällige Ansage und dreimal rot blinken |
+| LOCKED | Loop mit 15 % nach 5 s; pausiert für Voice/Zap-up | Aus; Play/Pause erlaubt manuelles An/Aus | Rot | Zufällige Ansage und dreimal rot blinken |
 | PANIC | Aus | Sofort 300 mA | Aus | Ignorieren |
 | RELEASING | Wartet auf Ansageende | In 2 s wieder 300 mA | In 2 s Grün (5 %) | Bis Ansageende ignorieren |
 
@@ -76,7 +76,9 @@ läuft `electric-zap_up_final.mp3` vollständig (etwa 3,987 Sekunden). Ihre aus 
 dekodierten Samples neu analysierte Strom-Timeline verwendet dieselbe Methode
 wie der Zap-Ausfall, mit maximal 700 mA und 10 V. Danach blendet die LED auf
 300 mA ein. Ein erneuter Play/Pause-Druck blendet sie über zwei Sekunden aus.
-Flat Par bleibt rot, Hintergrundmusik aus und Show gesperrt.
+Flat Par bleibt rot und die Show gesperrt. Die Hintergrundmusik pausiert für
+den Einschalt-Sound und läuft anschließend wieder, sobald die fünf Sekunden
+seit Beginn der Sperre abgelaufen sind.
 
 Während einer Hauptshow, Ansage, Blinkfolge oder laufenden Einschaltsequenz wird
 Play/Pause ignoriert. Während des Einschalt-Sounds werden auch Buzzer-Drücke
@@ -91,6 +93,26 @@ Eingabegeräten bereit; beide werden anhand der USB-ID und Tastencodes geöffnet
 unabhängig vom lokalen Show-Audio. Ein eigener Netzwerk-Thread verhindert
 Verzögerungen im Showablauf; weitere OK-Drücke während des Effekts werden verworfen.
 Siehe [HEOS-Soundboard](heos-soundboard.md). Andere Hama-Tasten sind nicht belegt.
+
+## Manueller Wechsel zwischen Idle und „Show fertig“
+
+**Taste 1** führt zurück zum freigegebenen Idle mit Hintergrundmusik,
+KORAD 300 mA und grünem PAR (5 %).
+
+**Taste 2** (`KEY_KP2`, Code 80) stellt denselben LOCKED-Zustand her wie
+nach dem vollständigen Showende: lokale Hintergrund-/Showmusik stoppen,
+KORAD ausblenden und ausschalten, PAR über zwei Sekunden auf Rot wechseln.
+Nach fünf Sekunden startet die Hintergrundmusik mit 15 % im Loop, genau wie
+nach dem normalen Showende. Die Show bleibt bis Taste 1 gesperrt.
+Der Buzzer startet jetzt keine Show, sondern nur die bestehende Blink-/Ansagenreaktion.
+
+Taste 2 beendet eine gerade laufende Hauptshow oder einen manuellen
+Zap-up-Einschalteffekt und verwirft deren weitere Licht-/Audioaktionen.
+Eine laufende Voice-Ansage endet vollständig; eine vorgemerkte Rückkehr
+zum Idle wird dabei aufgehoben. HEOS bleibt unabhängig bedienbar.
+**PANIC kann Taste 2 nicht aufheben**; dafür bleibt ausschließlich Taste 1 zuständig.
+
+In der Simulation: `2` + Enter für „Show fertig“, `1` + Enter für Idle.
 
 ## Panic-Stopp über OFF
 
@@ -123,14 +145,32 @@ In der Simulation: `x` + Enter für OFF/PANIC, `1` + Enter zum Wiederfreigeben.
 OFF ist ein Software-Stopp; Geräte-/USB-/Netzwerkausfälle können eine unabhängige
 Abschaltmöglichkeit erforderlich machen. Fehler werden im Terminal angezeigt.
 
+## Hintergrundmusik nach Showende
+
+Im normalen LOCKED-Zustand startet die Hintergrundmusik **fünf Sekunden nach
+Showende** wieder mit 15 % im Loop. Das gilt auch für den manuellen Wechsel
+mit Taste 2. Es gibt weiterhin keine automatische Showfreigabe und keinen
+Cooldown-Timer; PAR bleibt rot und KORAD aus, sofern nicht manuell eingeschaltet.
+
+Für eine Voice-Ansage oder Zap-up wird der lokale Hintergrundloop gestoppt.
+Die Datei spielt vollständig; anschließend startet der Loop wieder, wenn die
+ursprünglichen fünf Sekunden bereits abgelaufen sind. Sonst wird nur die
+Restzeit abgewartet. Die Pause gilt für die lokale Audioausgabe; das unabhängige
+HEOS-Soundboard verändert die Hintergrundmusik nicht.
+
+Taste 1 übernimmt einen bereits laufenden Hintergrundloop ohne Neustart in den
+Idle-Modus. OFF beendet den Loop und verwirft seinen noch ausstehenden Start;
+im Panic-Zustand läuft keine Hintergrundmusik.
+
 ## Einstellungen
 
 [config/show.json](../config/show.json) enthält insbesondere:
 
+- `locked_background_delay_s: 5.0`: Verzögerung des Hintergrundloops nach Showende.
 - `background_gain: 0.15`: 15 % Sample-Amplitude, unabhängig von Show und Ansagen.
 - `show_gain: 1.0` und `voice_gain: 1.0`: Zap und Ansagen mit 100 % Originalamplitude.
 - `bell_gain: 0.75`: Kirchenglocke mit 75 %.
-- `laugh_gain: 0.6`: Lachen mit 60 % (weitere 20 % leiser als zuvor).
+- `laugh_gain: 0.4`: Lachen mit 40 %.
 - `myers_gain: 1.6807285669423218`: Michael Myers auf 98 % Sample-Spitzenpegel verstärkt.
   Die aktuelle Datei erreicht maximal 32112/32767. Vor dem Rendern wird
   auf Sample-Clipping geprüft; bei zu wenig Reserve bricht der Start vor Gerätezugriff ab.

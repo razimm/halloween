@@ -18,7 +18,7 @@ Hintergrundmusik läuft im Idle als Loop mit **15 % Sample-Amplitude**, einstell
 über `background_gain` in `config/show.json` oder `--background-gain 0.15`.
 Die KORAD-LED leuchtet im Idle mit 300 mA, der Flat Par zeigt Grün mit 5 %.
 Die Show verwendet bis zu 700 mA und 100 % Flat-Par-Helligkeit; Show-Audio und
-Ansagen laufen mit 100 % Originalamplitude, Kirchenglocke mit 75 % und Lachen mit 60 %,
+Ansagen laufen mit 100 % Originalamplitude, Kirchenglocke mit 75 % und Lachen mit 40 %,
 Michael Myers mit 98 % Spitzenpegel. Die Spannungsgrenze bleibt bei 10 V.
 LED auf Kühlkörper und polrichtig anschließen. Abbruch mit **Strg+C**.
 Details: [Showablauf und Konfiguration](docs/show.md).
@@ -30,7 +30,7 @@ Details: [Showablauf und Konfiguration](docs/show.md).
    und endet bereits 0,5 Sekunden vor Soundende; anschließend folgt eine Sekunde Pause.
 2. `church_bell_final.mp3`: drei orange PAR-Lichtimpulse mit 100 % auf den Gongs; KORAD bleibt aus.
 3. `michael_myers_final.mp3` mit Flat-Par-Lichtfolge über Art-Net.
-4. `laughing.wav`, danach gesperrt: KORAD-LED und Hintergrundmusik aus, Flat Par rot.
+4. `laughing.wav`, danach gesperrt: KORAD-LED aus, Flat Par rot. Nach fünf Sekunden läuft die Hintergrundmusik wieder im Loop.
 5. Buzzer während der Sperre: dreimal rot blinken und eine zufällige Voice-Datei
    vollständig abspielen; weitere Drücke währenddessen werden verworfen.
 6. Hama-Taste **1** gibt wieder frei: Grün und KORAD-LED blenden über zwei Sekunden auf. Eine laufende
@@ -57,6 +57,7 @@ Kein automatischer Cooldown-Timer. Nebel/Servo sind noch nicht eingebunden.
 - **Hama-OFF:** Panic-Stopp: lokales Audio und HEOS stoppen, PAR aus, KORAD auf 300 mA.
   Buzzer, OK und Play bleiben gesperrt.
 - **Hama-Taste 1:** Freigabe nach Showende oder Panic; startet normalen Idle-Betrieb, keine Show.
+- **Hama-Taste 2:** „Show fertig“: KORAD aus, PAR rot, Show gesperrt; Hintergrundloop nach fünf Sekunden.
 - **Hama-Play/Pause:** KORAD im gesperrten Zustand an/aus; Einschalten mit
   `electric-zap_up_final.mp3` und Strommodulation, danach 300 mA. Keine Showfreigabe.
 - **Hama-OK:** Lachen auf HEOS_Kueche über das Heimnetz, mit 10 % Lautstärke.

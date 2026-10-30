@@ -1,9 +1,10 @@
 {
   "audio_device": "plughw:CARD=Headset,DEV=0",
   "background_gain": 0.15,
+  "locked_background_delay_s": 5.0,
   "show_gain": 1.0,
   "bell_gain": 0.75,
-  "laugh_gain": 0.6,
+  "laugh_gain": 0.4,
   "myers_gain": 1.6807285669423218,
   "voice_gain": 1.0,
   "serial_port": "/dev/serial/by-id/usb-Nuvoton_USB_Virtual_COM_001C1A770452-if00",
@@ -12,6 +13,7 @@
   "remote_vendor": 1444,
   "remote_product": 39041,
   "remote_release_key": 79,
+  "remote_finish_key": 80,
   "remote_power_key": 164,
   "remote_panic_key": 142,
   "artnet": {

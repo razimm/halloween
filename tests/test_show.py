@@ -60,11 +60,128 @@ class ShowTests(unittest.TestCase):
         self.assertEqual(self.lighting.value, scaled(RED, .5))
         self.advance(36000)
         self.assertEqual(self.show.state, 'LOCKED')
-        self.assertEqual(self.starts[-1], STAGES[-1])
+        self.assertEqual(self.starts[-1], BACKGROUND)
         self.show.release()
         self.assertEqual(self.show.state, 'IDLE')
         self.assertEqual(self.starts[-1], BACKGROUND)
         self.assertEqual(self.supply.bright.call_count, 3)
+
+    def test_finished_background_starts_after_five_seconds_and_loops_without_unlocking(self):
+        self.finish_show()
+        before = list(self.starts)
+        bright_calls = self.supply.bright.call_count
+        self.advance(4.99)
+        self.assertEqual(self.starts, before)
+        self.advance(.02)
+        self.assertEqual(self.starts[-1], BACKGROUND)
+        self.assertEqual(self.show.state, 'LOCKED')
+        self.assertEqual(self.lighting.value, scaled(RED, .5))
+        self.assertEqual(self.supply.bright.call_count, bright_calls)
+        count = self.starts.count(BACKGROUND)
+        self.advance(2)
+        self.assertEqual(self.starts.count(BACKGROUND), count + 1)
+        self.assertEqual(self.show.state, 'LOCKED')
+
+    def test_locked_background_yields_to_voice_and_resumes_after_full_response(self):
+        self.finish_show()
+        self.advance(5)
+        self.show.buzzer()
+        self.assertEqual(self.starts[-1], VOICES[1])
+        self.advance(1)
+        self.assertEqual(self.starts[-1], VOICES[1])
+        self.advance(1)
+        self.assertEqual(self.starts[-1], BACKGROUND)
+        self.assertEqual(self.show.state, 'LOCKED')
+
+    def test_background_due_during_long_voice_waits_until_complete(self):
+        self.finish_show()
+        self.audio.tracks[VOICES[1]]['duration'] = 8
+        self.advance(4)
+        self.show.buzzer()
+        self.advance(2)
+        self.assertEqual(self.starts[-1], VOICES[1])
+        self.advance(6)
+        self.assertEqual(self.starts[-1], BACKGROUND)
+
+    def test_locked_background_yields_to_power_up_and_release_keeps_loop_running(self):
+        self.finish_show()
+        self.advance(5)
+        self.show.power()
+        self.assertEqual(self.starts[-1], ZAP_UP)
+        self.advance(2)
+        self.assertEqual(self.starts[-1], BACKGROUND)
+        self.assertEqual(self.show.state, 'LOCKED')
+        before = list(self.starts)
+        self.show.release()
+        self.assertEqual(self.show.state, 'IDLE')
+        self.assertEqual(self.starts, before)
+
+    def test_panic_cancels_pending_finished_background(self):
+        self.finish_show()
+        self.advance(4)
+        self.show.panic()
+        before = list(self.starts)
+        self.advance(100)
+        self.assertEqual(self.starts, before)
+        self.assertEqual(self.show.state, 'PANIC')
+        self.assertTrue(self.audio.done())
+
+    def test_two_selects_finished_mode_from_idle_and_one_restores_idle(self):
+        dispatch_events(self.show, None, [('finish', time.time())])
+        self.assertEqual(self.show.state, 'LOCKED')
+        self.assertTrue(self.audio.done())
+        self.assertEqual(self.lighting.value, scaled(RED, .5))
+        self.supply.off.assert_called_with(fade_s=0)
+        self.show.buzzer()
+        self.assertEqual(self.starts[-1], VOICES[1])
+        self.advance(2)
+        self.show.release()
+        self.assertEqual(self.show.state, 'IDLE')
+        self.assertEqual(self.starts[-1], BACKGROUND)
+
+    def test_two_aborts_main_show_sections_without_late_cues(self):
+        for index in range(len(STAGES)):
+            self.show.buzzer()
+            self.audio.stop()
+            self.show.stage = index
+            self.show.begin_stage()
+            self.show.finish()
+            before = list(self.starts)
+            self.advance(100)
+            self.assertEqual(self.show.state, 'LOCKED')
+            self.assertEqual(self.starts, before + [BACKGROUND])
+            self.assertFalse(self.audio.done())
+            self.assertIsNone(self.lighting.flashes)
+            self.assertEqual(self.lighting.value, scaled(RED, .5))
+            self.show.release()
+
+    def test_two_keeps_voice_complete_and_cancels_pending_idle_release(self):
+        self.finish_show()
+        self.show.buzzer()
+        self.show.release()
+        self.assertEqual(self.show.state, 'RELEASING')
+        self.show.finish()
+        self.assertEqual(self.show.state, 'LOCKED')
+        self.assertTrue(self.show.voice)
+        self.assertFalse(self.audio.done())
+        self.advance(2)
+        self.assertEqual(self.show.state, 'LOCKED')
+        self.assertEqual(self.starts[-1], VOICES[1])
+
+    def test_two_stops_manual_power_up_and_does_not_override_panic(self):
+        self.finish_show()
+        self.show.power()
+        self.show.finish()
+        self.advance(10)
+        self.assertEqual(self.show.state, 'LOCKED')
+        self.assertFalse(self.show.manual_powering)
+        self.assertFalse(self.show.manual_light_on)
+        self.assertEqual(self.starts[-1], BACKGROUND)
+        self.show.panic()
+        self.show.finish()
+        self.assertEqual(self.show.state, 'PANIC')
+        self.show.release()
+        self.assertEqual(self.show.state, 'IDLE')
 
     def test_panic_aborts_each_show_section_and_latches_until_one(self):
         self.show.buzzer()
@@ -357,7 +474,7 @@ class AdapterTests(unittest.TestCase):
         for device in (keyboard, mouse, consumer):
             device.info = SimpleNamespace(vendor=1444, product=39041)
             device.read.return_value = []
-        keyboard.capabilities.return_value = {1: [79, 69, 28, 142]}
+        keyboard.capabilities.return_value = {1: [79, 80, 69, 28, 142]}
         mouse.capabilities.return_value = {}
         consumer.capabilities.return_value = {1: [164]}
         fake_evdev = SimpleNamespace(
@@ -586,6 +703,7 @@ class AdapterTests(unittest.TestCase):
         consumer = Mock()
         inputs.remotes = [inputs.remote, consumer]
         inputs.key = 79
+        inputs.finish_key = 80
         inputs.power_key = 164
         inputs.panic_key = 142
         inputs.heos_key = 28
@@ -599,7 +717,7 @@ class AdapterTests(unittest.TestCase):
         consumer.read.return_value = [SimpleNamespace(type=1, code=164, value=value)
                                       for value in (2, 0, 1)]
         with patch('tools.show_hardware.select.select', return_value=(inputs.remotes, [], [])):
-            self.assertEqual(inputs.poll(), [('release', 123.0), ('heos', 123.0), 'power'])
+            self.assertEqual(inputs.poll(), [('finish', 123.0), ('release', 123.0), ('heos', 123.0), 'power'])
 
     def test_artpoll_reply_preserves_zero_based_port_address(self):
         packet = bytearray(239)

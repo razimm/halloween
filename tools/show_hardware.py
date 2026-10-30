@@ -18,7 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def validate_config(config, hardware=False):
-    keys = [config['remote_release_key'], config['remote_power_key'], config['remote_panic_key']]
+    keys = [config['remote_release_key'], config['remote_finish_key'],
+            config['remote_power_key'], config['remote_panic_key']]
     if config.get('heos', {}).get('enabled'):
         keys.append(config['remote_heos_key'])
     if len(keys) != len(set(keys)):
@@ -40,6 +41,8 @@ def validate_config(config, hardware=False):
     for name in ('transition_s', 'zap_fade_out_s'):
         if not math.isfinite(config[name]) or not 0 <= config[name] <= 10:
             raise ValueError(f'{name} must be in [0, 10]')
+    if not math.isfinite(config['locked_background_delay_s']) or config['locked_background_delay_s'] < 0:
+        raise ValueError('locked_background_delay_s must be nonnegative')
     if not 0 < config['zap_par_flash_s'] <= 1:
         raise ValueError('zap_par_flash_s must be in (0, 1]')
     for name in ('zap_par_flash_fade_s', 'zap_par_flash_advance_s', 'zap_bell_pause_s'):
@@ -427,6 +430,7 @@ class Inputs:
         self.remote = None
         self.remotes = []
         self.key = config['remote_release_key']
+        self.finish_key = config['remote_finish_key']
         self.power_key = config['remote_power_key']
         self.panic_key = config['remote_panic_key']
         self.heos_key = config['remote_heos_key'] if config.get('heos', {}).get('enabled') else None
@@ -434,7 +438,7 @@ class Inputs:
         self.debounce = config['buzzer_debounce_s']
         self.last_buzzer = float('-inf')
         try:
-            required_keys = {self.key, self.power_key, self.panic_key}
+            required_keys = {self.key, self.finish_key, self.power_key, self.panic_key}
             if self.heos_key is not None:
                 required_keys.add(self.heos_key)
             found_keys = set()
@@ -459,7 +463,7 @@ class Inputs:
                         continue
                 device.close()
             if found_keys != required_keys:
-                raise RuntimeError('Hama keypad, OFF, Play/Pause or OK (05a4:9881) not found')
+                raise RuntimeError('Required Hama keys (1, 2, OFF, Play/Pause, OK) not found')
             self.button = Button(config['buzzer_gpio'], pull_up=True,
                                  bounce_time=self.debounce)
             self.was_pressed = self.button.is_pressed
@@ -487,6 +491,8 @@ class Inputs:
                 if event.type == self.ecodes.EV_KEY and event.value == 1:
                     if event.code == self.key:
                         events.append(('release', event.timestamp()))
+                    elif event.code == self.finish_key:
+                        events.append(('finish', event.timestamp()))
                     elif event.code == self.panic_key:
                         events.append(('panic', event.timestamp()))
                     elif event.code == self.power_key:
